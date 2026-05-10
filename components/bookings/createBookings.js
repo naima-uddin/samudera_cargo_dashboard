@@ -500,7 +500,7 @@ export default function CreateBooking() {
     },
     
     courier: {
-      company: 'Cargo Logistics Group',
+      company: 'Samudera Traffic Co., Ltd.s Group',
       serviceType: 'standard'
     },
     
@@ -1261,7 +1261,7 @@ export default function CreateBooking() {
         },
         
         courier: {
-          company: 'Cargo Logistics Group',
+          company: 'Samudera Traffic Co., Ltd.s Group',
           serviceType: formData.serviceType
         },
         

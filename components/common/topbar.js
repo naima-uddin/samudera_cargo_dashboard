@@ -142,7 +142,7 @@ export default function Topbar() {
             <div 
               className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
               style={{ 
-                background: 'linear-gradient(135deg, #E67E22 0%, #3C719D 100%)'
+                background: 'linear-gradient(135deg, #d10000 0%, #0E2047 100%)'
               }}
             >
               {getInitials()}
@@ -158,7 +158,7 @@ export default function Topbar() {
           <input
             type="text"
             placeholder="Search..."
-            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#E67E22] focus:ring-1 focus:ring-[#E67E22] transition-colors"
+            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
           />
         </div>
       </div>

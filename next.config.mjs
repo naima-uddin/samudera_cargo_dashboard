@@ -1,14 +1,12 @@
 /** @type {import('next').NextConfig} */
 
-const isStandaloneBuild = process.env.BUILD_STANDALONE === 'true';
-
 const nextConfig = {
-  output: isStandaloneBuild ? 'standalone' : 'export',
+  output: 'standalone', // Must use standalone for middleware support
   trailingSlash: true,
   
-  // Image Optimization - ENABLED
+  // Image Optimization - DISABLED for production
   images: {
-    unoptimized: false, // Enable image optimization for faster loading
+    unoptimized: true, // Required for middleware compatibility
     formats: ['image/avif', 'image/webp'], // Modern formats
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

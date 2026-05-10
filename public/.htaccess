@@ -1,0 +1,31 @@
+Options -MultiViews
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Keep real files and directories reachable
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Never rewrite Next.js exported runtime/static assets
+    RewriteRule ^_next/ - [L]
+
+    # Never rewrite requests that already target a file (js/css/fonts/images/etc.)
+    RewriteCond %{REQUEST_URI} \.[A-Za-z0-9]{1,8}$ [NC]
+    RewriteRule ^ - [L]
+
+    # Route clean URLs to exported index.html files
+    RewriteRule ^(.+?)/?$ $1/index.html [L]
+
+    # Root fallback
+    RewriteRule ^$ index.html [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType text/css .css
+</IfModule>
+
+ErrorDocument 404 /404.html

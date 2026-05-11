@@ -519,7 +519,7 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 transition-opacity" onClick={onClose}>
-          <div className="absolute inset-0 bg-red-500 opacity-75"></div>
+          <div className="absolute inset-0 bg-gray-300 opacity-75"></div>
         </div>
         <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
         <div className={`inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle ${sizes[size]} w-full`}>
@@ -899,7 +899,7 @@ const UpdateStatusModal = ({
             <Button type="button" variant="light" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" variant="primary" disabled={!selectedStatus}>
+            <Button className="bg-green-500 text-white" type="submit"  disabled={!selectedStatus}>
               Continue
             </Button>
           </div>
@@ -940,7 +940,7 @@ const UpdateStatusModal = ({
             <Button type="button" variant="light" onClick={() => setShowConfirm(false)}>
               Cancel
             </Button>
-            <Button type="button" variant="primary" onClick={handleConfirm} isLoading={isUpdating}>
+            <Button className="bg-green-500 text-white" type="button" onClick={handleConfirm} isLoading={isUpdating}>
               Confirm Update
             </Button>
           </div>
@@ -1375,9 +1375,8 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
             {/* Add Button */}
             <Button 
               type="button" 
-              variant="primary" 
               size="sm" 
-              className="w-full mb-3" 
+              className="w-full mb-3 bg-red-500 text-white" 
               onClick={addContainer}
               icon={<Plus className="h-3 w-3" />}
             >
@@ -1432,7 +1431,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               </Button>
               <Button
                 type="button"
-                variant="primary"
+                className="bg-green-500 text-white"
                 size="sm"
                 onClick={saveContainers}
                 isLoading={isSavingContainers}

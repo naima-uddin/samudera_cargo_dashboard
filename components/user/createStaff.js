@@ -772,7 +772,7 @@ const handleReset = () => {
                       index <= activeStep
                         ? userType === 'admin'
                           ? 'bg-blue-500 text-white shadow-lg shadow-blue-200'
-                          : 'bg-orange-500 text-white shadow-lg shadow-orange-200'
+                          : 'bg-red-600 text-white shadow-lg shadow-orange-200'
                         : 'bg-gray-200 text-gray-500'
                     }`}>
                       {step.icon}
@@ -784,7 +784,7 @@ const handleReset = () => {
                       index < activeStep
                         ? userType === 'admin'
                           ? 'bg-blue-500'
-                          : 'bg-orange-500'
+                          : 'bg-red-600'
                         : 'bg-gray-200'
                     }`} />
                   )}

@@ -855,7 +855,7 @@ const handleResume = async () => {
           {display.progress !== null && display.progress > 0 && (
             <div className="w-12 h-1 bg-gray-200 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-orange-500 rounded-full transition-all duration-300"
+                className="h-full bg-red-600 rounded-full transition-all duration-300"
                 style={{ width: `${display.progress}%` }}
               />
             </div>
@@ -926,7 +926,7 @@ const handleResume = async () => {
               <div className="flex items-center space-x-1">
                 <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-orange-500 rounded-full transition-all duration-300"
+                    className="h-full bg-red-600 rounded-full transition-all duration-300"
                     style={{ width: `${display.progress}%` }}
                   />
                 </div>
@@ -1223,7 +1223,7 @@ const ConsolidationCard = ({
       draft: 'bg-gray-500',
       in_progress: 'bg-blue-500',
       consolidated: 'bg-purple-500',
-      ready_for_dispatch: 'bg-orange-500',
+      ready_for_dispatch: 'bg-red-600',
       loaded: 'bg-indigo-500',
       dispatched: 'bg-amber-500',
       in_transit: 'bg-yellow-500',
@@ -1232,7 +1232,7 @@ const ConsolidationCard = ({
       customs_cleared: 'bg-emerald-500',
       out_for_delivery: 'bg-sky-500',
       delivered: 'bg-green-500',
-      on_hold: 'bg-orange-500',
+      on_hold: 'bg-red-600',
       cancelled: 'bg-red-500'
     };
     return colors[journeyStatus] || 'bg-gray-500';
@@ -2234,7 +2234,7 @@ const ConsolidationDetailsModal = ({
                             isCompleted 
                               ? 'bg-green-500 text-white' 
                               : isCurrent 
-                                ? 'bg-orange-500 text-white ring-4 ring-orange-200'
+                                ? 'bg-red-600 text-white ring-4 ring-orange-200'
                                 : 'bg-gray-200 text-gray-400'
                           }`}>
                             {isCompleted && idx < currentStepIndex ? (

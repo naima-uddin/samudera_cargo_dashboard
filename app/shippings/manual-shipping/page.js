@@ -1636,7 +1636,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               </Button>
               <Button
                 type="button"
-                variant="primary"
+                className="bg-green-500 text-white"
                 size="sm"
                 isLoading={isSavingSenderReceiver}
                 onClick={saveSenderReceiverInfo}
@@ -1836,7 +1836,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
           })()}
 
           <div className="flex justify-end pt-4">
-            <Button type="button" variant="primary" onClick={onClose}>Close</Button>
+            <Button type="button" className="bg-red-500 text-white" onClick={onClose}>Close</Button>
           </div>
         </div>
       </Modal>

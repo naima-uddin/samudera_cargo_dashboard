@@ -954,7 +954,8 @@ const UpdateStatusModal = ({
 const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [containerNumbers, setContainerNumbers] = useState(shipment?.containers || []);
-  const [newContainer, setNewContainer] = useState({ containerNumber: "", sealNumber: "" });
+  const [newContainer, setNewContainer] = useState({ containerNumber: "", sealNumber: "", blNumber: "" });
+  const [transportDetails, setTransportDetails] = useState({ vesselName: '', voyageNumber: '' });
   const [isSavingContainers, setIsSavingContainers] = useState(false);
   const [editingSender, setEditingSender] = useState(false);
   const [editingReceiver, setEditingReceiver] = useState(false);
@@ -968,6 +969,10 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
       setContainerNumbers(shipment?.containers || []);
       setSenderData(shipment?.sender || {});
       setReceiverData(shipment?.receiver || {});
+      setTransportDetails({
+        vesselName: shipment?.transport?.vesselName || '',
+        voyageNumber: shipment?.transport?.voyageNumber || ''
+      });
       setEditingSender(false);
       setEditingReceiver(false);
     }
@@ -990,13 +995,13 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
   };
 
   const addContainer = () => {
-    if (!newContainer.containerNumber && !newContainer.sealNumber) {
-      toast.warning("Please provide container number or seal number");
+    if (!newContainer.containerNumber && !newContainer.sealNumber && !newContainer.blNumber) {
+      toast.warning("Please provide container number, seal number, or BL number");
       return;
     }
     setContainerNumbers([...containerNumbers, { ...newContainer }]);
-    setNewContainer({ containerNumber: "", sealNumber: "" });
-    toast.success("Container/Seal added");
+    setNewContainer({ containerNumber: "", sealNumber: "", blNumber: "" });
+    toast.success("Container/Seal/BL added");
   };
 
   const removeContainer = (index) => {
@@ -1010,7 +1015,8 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
       const response = await updateShipmentStatus(shipment._id, {
         status: currentShipmentStatus,
         notes: 'Updated shipment containers',
-        containers: containerNumbers
+        containers: containerNumbers,
+        transport: transportDetails
       });
 
       if (response.success) {
@@ -1239,6 +1245,44 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               />
             </div>
 
+            {/* BL Number Input */}
+            <div className="mb-3">
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                BL Number
+              </label>
+              <input
+                type="text"
+                placeholder="Enter BL number"
+                value={newContainer.blNumber}
+                onChange={(e) => setNewContainer({ ...newContainer, blNumber: e.target.value })}
+                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 mb-2"
+              />
+            </div>
+
+            {/* Vessel and Voyage Inputs */}
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Vessel Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter vessel name"
+                  value={transportDetails.vesselName}
+                  onChange={(e) => setTransportDetails({ ...transportDetails, vesselName: e.target.value })}
+                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Voyage Number</label>
+                <input
+                  type="text"
+                  placeholder="Enter voyage number"
+                  value={transportDetails.voyageNumber}
+                  onChange={(e) => setTransportDetails({ ...transportDetails, voyageNumber: e.target.value })}
+                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+              </div>
+            </div>
+
             {/* Add Button */}
             <Button 
               type="button" 
@@ -1265,6 +1309,11 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                       <p className="text-xs text-gray-700">
                         <span className="font-medium">Seal:</span> {container.sealNumber}
                       </p>
+                      {container.blNumber && (
+                        <p className="text-xs text-gray-700">
+                          <span className="font-medium">BL:</span> {container.blNumber}
+                        </p>
+                      )}
                     </div>
                     <button
                       type="button"

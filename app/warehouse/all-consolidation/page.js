@@ -2847,6 +2847,7 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
     containerNumbers: [''],
     containerType: '',
     sealNumbers: [''],
+    blNumbers: [''],
     estimatedDeparture: '',
     notes: ''
   });
@@ -2855,10 +2856,12 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
     if (consolidation) {
       const existingContainers = consolidation.containerNumbers || (consolidation.containerNumber ? consolidation.containerNumber.split(',').map(s => s.trim()) : []);
       const existingSeals = consolidation.sealNumbers || (consolidation.sealNumber ? consolidation.sealNumber.split(',').map(s => s.trim()) : []);
+      const existingBLs = consolidation.blNumbers || (consolidation.blNumber ? consolidation.blNumber.split(',').map(s => s.trim()) : []);
       setFormData({
         containerNumbers: existingContainers.length ? existingContainers : [''],
         containerType: getContainerType(consolidation),
         sealNumbers: existingSeals.length ? existingSeals : [''],
+        blNumbers: existingBLs.length ? existingBLs : [''],
         estimatedDeparture: consolidation.estimatedDeparture?.split('T')[0] || '',
         notes: consolidation.notes || ''
       });
@@ -2876,14 +2879,20 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
   const removeSealField = (i) => setFormData(prev => ({ ...prev, sealNumbers: prev.sealNumbers.filter((_, idx) => idx !== i) }));
   const updateSealField = (i, value) => setFormData(prev => { const arr = [...prev.sealNumbers]; arr[i] = value; return { ...prev, sealNumbers: arr }; });
 
+  const addBlField = () => setFormData(prev => ({ ...prev, blNumbers: [...prev.blNumbers, ''] }));
+  const removeBlField = (i) => setFormData(prev => ({ ...prev, blNumbers: prev.blNumbers.filter((_, idx) => idx !== i) }));
+  const updateBlField = (i, value) => setFormData(prev => { const arr = [...prev.blNumbers]; arr[i] = value; return { ...prev, blNumbers: arr }; });
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const cleanedContainers = (formData.containerNumbers || []).map(c => (c || '').trim()).filter(Boolean);
       const cleanedSeals = (formData.sealNumbers || []).map(s => (s || '').trim()).filter(Boolean);
+      const cleanedBLs = (formData.blNumbers || []).map(b => (b || '').trim()).filter(Boolean);
 
       const containerNumber = cleanedContainers.join(', ');
       const sealNumber = cleanedSeals.join(', ');
+      const blNumber = cleanedBLs.join(', ');
 
       // compute newly added entries for timeline
       const existingContainers = consolidation?.containerNumber ? consolidation.containerNumber.split(',').map(s => s.trim()) : [];
@@ -2899,11 +2908,13 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
         containerNumber,
         containerType: formData.containerType,
         sealNumber,
+        blNumber,
         estimatedDeparture: formData.estimatedDeparture || undefined,
         notes: formData.notes,
         // include arrays for future-proofing
         containerNumbers: cleanedContainers,
         sealNumbers: cleanedSeals,
+        blNumbers: cleanedBLs,
         timeline: timelineUpdates
       });
 
@@ -2972,6 +2983,28 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
             {consolidation?.status !== 'draft' && (
               <p className="mt-1 text-[10px] text-gray-500">Container type is locked once consolidation has started; container and seal numbers can still be updated.</p>
             )}
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">BL Number(s)</label>
+            <div className="space-y-2">
+              {formData.blNumbers.map((bl, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={bl}
+                    onChange={(e) => updateBlField(idx, e.target.value)}
+                    className="flex-1 p-2 text-sm border rounded-lg focus:ring-1 focus:ring-[#E67E22]"
+                  />
+                  {formData.blNumbers.length > 1 && (
+                    <button type="button" onClick={() => removeBlField(idx)} className="px-2 py-1 text-xs bg-red-50 text-red-600 rounded">Remove</button>
+                  )}
+                </div>
+              ))}
+              <div className="flex gap-2">
+                <button type="button" onClick={addBlField} className="px-3 py-1 text-xs bg-green-50 text-green-700 rounded">Add BL</button>
+              </div>
+            </div>
           </div>
 
           <div>

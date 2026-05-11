@@ -1426,22 +1426,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               <p className="text-xs text-gray-500 text-center py-2">No vessel/voyage added yet</p>
             )}
 
-            {/* Booking Number */}
-            <div className="mt-4 border border-blue-200 rounded-lg p-3 bg-blue-50">
-              <p className="text-xs font-semibold text-blue-700 mb-2">Booking Number</p>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={bookingNumber}
-                  onChange={(e) => setBookingNumber(e.target.value)}
-                  placeholder="e.g. BKG-2605-00001"
-                  className="flex-1 text-sm border border-blue-300 rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
-                />
-                {shipment?.bookingNumber && (
-                  <span className="text-xs text-gray-500">Current: <span className="font-medium text-blue-700">{shipment.bookingNumber}</span></span>
-                )}
-              </div>
-            </div>
+           
 
             <div className="mt-3 flex justify-end gap-2">
               <Button

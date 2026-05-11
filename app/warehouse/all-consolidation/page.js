@@ -486,22 +486,8 @@ const ShipmentCard = ({ shipment, consolidationId, consolidationStatus, onShipme
     setCurrentProgress(getProgressFromStatus(shipment.status));
   }, [shipment.status, shipment.currentLocation]);
 
-  // Auto-refresh when consolidation status changes
-  useEffect(() => {
-    console.log('🔄 Consolidation status changed, refreshing tracking:', consolidationStatus);
-    if (shipment?.trackingNumber) {
-      fetchTrackingStatus();
-    }
-  }, [consolidationStatus]);
-
-  // Auto-fetch tracking status on mount
-  useEffect(() => {
-    if (shipment?.trackingNumber) {
-      fetchTrackingStatus();
-    }
-  }, [shipment?.trackingNumber]);
-
-  const fetchTrackingStatus = async () => {
+  // Memoize fetchTrackingStatus to prevent infinite loops
+  const memoizedFetchTrackingStatus = useCallback(async () => {
     if (!shipment?.trackingNumber) return;
     
     setTrackingLoading(true);
@@ -526,13 +512,10 @@ const ShipmentCard = ({ shipment, consolidationId, consolidationStatus, onShipme
           updatedAt: result.data.lastUpdate,
           trackingHistory: result.data.timeline || shipment.milestones || []
         });
-        
-        // Update local state with tracking data
         setCurrentStatus(result.data.status);
         setCurrentLocation(result.data.currentLocation || getLocationFromStatus(result.data.status));
         setCurrentProgress(result.data.progress || getProgressFromStatus(result.data.status));
       } else {
-        // Fallback to shipment data
         setTrackingData({
           trackingNumber: shipment.trackingNumber,
           status: shipment.status,
@@ -554,7 +537,20 @@ const ShipmentCard = ({ shipment, consolidationId, consolidationStatus, onShipme
     } finally {
       setTrackingLoading(false);
     }
-  };
+  }, [shipment]);
+
+  // Auto-refresh when consolidation status changes
+  useEffect(() => {
+    console.log('🔄 Consolidation status changed, refreshing tracking:', consolidationStatus);
+    memoizedFetchTrackingStatus();
+  }, [consolidationStatus, memoizedFetchTrackingStatus]);
+
+  // Auto-fetch tracking status on mount
+  useEffect(() => {
+    memoizedFetchTrackingStatus();
+  }, [memoizedFetchTrackingStatus]);
+
+
 
   const getDisplayStatus = () => {
     if (trackingLoading) {
@@ -1850,13 +1846,10 @@ const ConsolidationDetailsModal = ({
   useEffect(() => {
     if (consolidation) {
       console.log('Details Modal - Consolidation:', consolidation);
-      if (consolidation.shipments) {
-        // ✅ Deduplicate shipments during modal load
-        setShipments(deduplicateShipments(consolidation.shipments));
-      }
-      if (consolidation.items) {
-        setItems(consolidation.items);
-      }
+      const deduped = consolidation.shipments ? deduplicateShipments(consolidation.shipments) : [];
+      const items = consolidation.items || [];
+      setShipments(deduped);
+      setItems(items);
     }
   }, [consolidation]);
 
@@ -5270,14 +5263,15 @@ const DeliveredModal = ({ isOpen, onClose, consolidation, onSuccess }) => {
 
 // ==================== MAIN PAGE ====================
 
-export default function ConsolidationsPage() { 
-  useEffect(() => {  // ← এই পুরো useEffect যোগ করুন
+export default function ConsolidationsPage() {
+  const router = useRouter();
+  
+  useEffect(() => {
     const token = getAuthToken();
     if (!token) {
       router.push('/');
     }
-  }, []);
-  const router = useRouter();
+  }, [router]);
   
   // State
   const [loading, setLoading] = useState(true);
@@ -5334,7 +5328,7 @@ export default function ConsolidationsPage() {
   // Apply filters whenever filters change
   useEffect(() => {
     applyFilters();
-  }, [filters, allConsolidations]);
+  }, [filters, allConsolidations]); // applyFilters is defined below but won't change during render
 
   const loadConsolidations = async () => {
     setLoading(true);

@@ -1292,7 +1292,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               onClick={addContainer}
               icon={<Plus className="h-3 w-3" />}
             >
-              Add Container & Seal
+              Add
             </Button>
 
             {/* List of Containers */}

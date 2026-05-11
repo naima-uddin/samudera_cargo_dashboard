@@ -150,7 +150,7 @@ const InvoicePDF = ({ invoice, companyInfo }) => {
     address: '8825 STANFORD BLVD, SUITE 306,',
     city: 'COLUMBIA, MD 21045,USA',
     phone: '+1-647-362-7735',
-    email: 'info@cargologisticscompany.com'
+    email: 'info@samuderathai.com'
   };
   const info = companyInfo || defaultCompany;
 
@@ -237,7 +237,7 @@ const COMPANY_INFO = {
   address: 'Green Tower, 9th floor, 3656/27-28 Rama IV Road',
   city: 'Klongton-Klong Toey ,Bangkok 10110, Thailand',
   phone: '+1-647-362-7735',
-  email: 'info@cargologisticscompany.com'
+  email: 'info@samuderathai.com'
 };
 
 // PDF Download Function

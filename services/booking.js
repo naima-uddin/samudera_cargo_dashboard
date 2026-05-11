@@ -144,14 +144,7 @@ export const updatePriceQuote = async (bookingId, quoteData) => {
 
   return runSingleFlight(key, async () => {
   try {
-    const payload = {
-      ...quoteData,
-      forceUpdate: true
-    };
-
-    const response = await axiosInstance.put(`/booking/${bookingId}/price-quote`, payload, {
-      params: { forceUpdate: true }
-    });
+    const response = await axiosInstance.put(`/booking/${bookingId}/price-quote`, quoteData);
     
     if (response.data.success) {
       return {
@@ -170,12 +163,7 @@ export const updatePriceQuote = async (bookingId, quoteData) => {
     const shouldRetryPlural = [404].includes(error?.response?.status);
     if (shouldRetryPlural) {
       try {
-        const retryResponse = await axiosInstance.put(`/bookings/${bookingId}/price-quote`, {
-          ...quoteData,
-          forceUpdate: true
-        }, {
-          params: { forceUpdate: true }
-        });
+        const retryResponse = await axiosInstance.put(`/bookings/${bookingId}/price-quote`, quoteData);
 
         if (retryResponse.data.success) {
           return {

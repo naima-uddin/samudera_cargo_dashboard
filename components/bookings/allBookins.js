@@ -614,7 +614,7 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
             <button
               onClick={onClose}
-              className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1 hover:bg-gray-100 rounded-lg transition-colors "
             >
               <X className="h-5 w-5 text-gray-500" />
             </button>
@@ -1578,10 +1578,10 @@ const BookingDetailsModal = ({ isOpen, onClose, booking }) => {
           </div>
         )}
 
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end pt-4 ">
           <Button
+          className="bg-red-500"
             type="button"
-            variant="primary"
             onClick={onClose}
           >
             Close

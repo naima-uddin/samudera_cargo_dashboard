@@ -2841,8 +2841,8 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
     containerType: '',
     sealNumbers: [''],
     blNumbers: [''],
-    vesselName: '',
-    voyageNumber: '',
+    vesselNames: [''],
+    voyageNumbers: [''],
     estimatedDeparture: '',
     notes: ''
   });
@@ -2856,8 +2856,8 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
       let inferredContainers = [];
       let inferredSeals = [];
       let inferredBLs = [];
-      let inferredVessel = '';
-      let inferredVoyage = '';
+      let inferredVessels = [];
+      let inferredVoyages = [];
 
       if ((!existingContainers || existingContainers.length === 0) && Array.isArray(consolidation.shipments) && consolidation.shipments.length > 0) {
         consolidation.shipments.forEach(s => {
@@ -2875,28 +2875,31 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
           inferredSeals.push(...getValues(shipment?.sealNumber || fromDetails?.sealNumber || shipment?.seal || shipment?.sealNo));
           inferredBLs.push(...getValues(shipment?.blNumber || fromDetails?.blNumber || shipment?.blNumber));
 
-          inferredVessel = inferredVessel || (shipment?.transport?.vesselName) || fromDetails?.vesselName || '';
-          inferredVoyage = inferredVoyage || (shipment?.transport?.voyageNumber) || fromDetails?.voyageNumber || '';
+          inferredVessels.push((shipment?.transport?.vesselName) || fromDetails?.vesselName || shipment?.vesselName || '');
+          inferredVoyages.push((shipment?.transport?.voyageNumber) || fromDetails?.voyageNumber || shipment?.voyageNumber || '');
         });
 
         // dedupe
         inferredContainers = [...new Set(inferredContainers.filter(Boolean))];
         inferredSeals = [...new Set(inferredSeals.filter(Boolean))];
         inferredBLs = [...new Set(inferredBLs.filter(Boolean))];
+        inferredVessels = [...new Set(inferredVessels.filter(Boolean))];
+        inferredVoyages = [...new Set(inferredVoyages.filter(Boolean))];
       }
 
       const finalContainers = (existingContainers && existingContainers.length) ? existingContainers : (inferredContainers.length ? inferredContainers : ['']);
       const finalSeals = (existingSeals && existingSeals.length) ? existingSeals : (inferredSeals.length ? inferredSeals : ['']);
       const finalBLs = (existingBLs && existingBLs.length) ? existingBLs : (inferredBLs.length ? inferredBLs : ['']);
+      const finalVessels = (consolidation.vesselNames && consolidation.vesselNames.length) ? consolidation.vesselNames : (consolidation.vesselName ? consolidation.vesselName.toString().split(',').map(s=>s.trim()) : (inferredVessels.length ? inferredVessels : ['']));
+      const finalVoyages = (consolidation.voyageNumbers && consolidation.voyageNumbers.length) ? consolidation.voyageNumbers : (consolidation.voyageNumber ? consolidation.voyageNumber.toString().split(',').map(s=>s.trim()) : (inferredVoyages.length ? inferredVoyages : ['']));
 
       setFormData({
-        containerNumbers: existingContainers.length ? existingContainers : [''],
+        containerNumbers: finalContainers,
         containerType: getContainerType(consolidation),
         sealNumbers: finalSeals,
         blNumbers: finalBLs,
-        containerNumbers: finalContainers,
-        vesselName: consolidation.vesselName || consolidation.carrier?.vesselNumber || inferredVessel || '',
-        voyageNumber: consolidation.voyageNumber || inferredVoyage || '',
+        vesselNames: finalVessels,
+        voyageNumbers: finalVoyages,
         estimatedDeparture: consolidation.estimatedDeparture?.split('T')[0] || '',
         notes: consolidation.notes || ''
       });
@@ -2918,16 +2921,28 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
   const removeBlField = (i) => setFormData(prev => ({ ...prev, blNumbers: prev.blNumbers.filter((_, idx) => idx !== i) }));
   const updateBlField = (i, value) => setFormData(prev => { const arr = [...prev.blNumbers]; arr[i] = value; return { ...prev, blNumbers: arr }; });
 
+  const addVesselField = () => setFormData(prev => ({ ...prev, vesselNames: [...prev.vesselNames, ''] }));
+  const removeVesselField = (i) => setFormData(prev => ({ ...prev, vesselNames: prev.vesselNames.filter((_, idx) => idx !== i) }));
+  const updateVesselField = (i, value) => setFormData(prev => { const arr = [...prev.vesselNames]; arr[i] = value; return { ...prev, vesselNames: arr }; });
+
+  const addVoyageField = () => setFormData(prev => ({ ...prev, voyageNumbers: [...prev.voyageNumbers, ''] }));
+  const removeVoyageField = (i) => setFormData(prev => ({ ...prev, voyageNumbers: prev.voyageNumbers.filter((_, idx) => idx !== i) }));
+  const updateVoyageField = (i, value) => setFormData(prev => { const arr = [...prev.voyageNumbers]; arr[i] = value; return { ...prev, voyageNumbers: arr }; });
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const cleanedContainers = (formData.containerNumbers || []).map(c => (c || '').trim()).filter(Boolean);
       const cleanedSeals = (formData.sealNumbers || []).map(s => (s || '').trim()).filter(Boolean);
       const cleanedBLs = (formData.blNumbers || []).map(b => (b || '').trim()).filter(Boolean);
+      const cleanedVessels = (formData.vesselNames || []).map(v => (v || '').trim()).filter(Boolean);
+      const cleanedVoyages = (formData.voyageNumbers || []).map(v => (v || '').trim()).filter(Boolean);
 
       const containerNumber = cleanedContainers.join(', ');
       const sealNumber = cleanedSeals.join(', ');
       const blNumber = cleanedBLs.join(', ');
+      const vesselName = cleanedVessels.join(', ');
+      const voyageNumber = cleanedVoyages.join(', ');
 
       // compute newly added entries for timeline
       const existingContainers = consolidation?.containerNumber ? consolidation.containerNumber.split(',').map(s => s.trim()) : [];
@@ -2944,14 +2959,16 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
         containerType: formData.containerType,
         sealNumber,
         blNumber,
-        vesselName: formData.vesselName || undefined,
-        voyageNumber: formData.voyageNumber || undefined,
+        vesselName: vesselName || undefined,
+        voyageNumber: voyageNumber || undefined,
         estimatedDeparture: formData.estimatedDeparture || undefined,
         notes: formData.notes,
         // include arrays for future-proofing
         containerNumbers: cleanedContainers,
         sealNumbers: cleanedSeals,
         blNumbers: cleanedBLs,
+        vesselNames: cleanedVessels,
+        voyageNumbers: cleanedVoyages,
         timeline: timelineUpdates
       });
 
@@ -3018,7 +3035,7 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
               ))}
             </select>
             {consolidation?.status !== 'draft' && (
-              <p className="mt-1 text-[10px] text-gray-500">Container type is locked once consolidation has started; container and seal numbers can still be updated.</p>
+              <p className="mt-1 text-[10px] text-gray-500">Container type is locked once consolidation has started; container and seal numbers can still be updated</p>
             )}
           </div>
 
@@ -3077,6 +3094,50 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
               onChange={(e) => setFormData({ ...formData, estimatedDeparture: e.target.value })}
               className="w-full p-2 text-sm border rounded-lg focus:ring-1 focus:ring-[#E67E22]"
             />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">Vessel Name(s)</label>
+            <div className="space-y-2">
+              {formData.vesselNames.map((v, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={v}
+                    onChange={(e) => updateVesselField(idx, e.target.value)}
+                    className="flex-1 p-2 text-sm border rounded-lg focus:ring-1 focus:ring-[#E67E22]"
+                  />
+                  {formData.vesselNames.length > 1 && (
+                    <button type="button" onClick={() => removeVesselField(idx)} className="px-2 py-1 text-xs bg-red-50 text-red-600 rounded">Remove</button>
+                  )}
+                </div>
+              ))}
+              <div className="flex gap-2">
+                <button type="button" onClick={addVesselField} className="px-3 py-1 text-xs bg-green-50 text-green-700 rounded">Add vessel</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">Voyage Number(s)</label>
+            <div className="space-y-2">
+              {formData.voyageNumbers.map((v, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={v}
+                    onChange={(e) => updateVoyageField(idx, e.target.value)}
+                    className="flex-1 p-2 text-sm border rounded-lg focus:ring-1 focus:ring-[#E67E22]"
+                  />
+                  {formData.voyageNumbers.length > 1 && (
+                    <button type="button" onClick={() => removeVoyageField(idx)} className="px-2 py-1 text-xs bg-red-50 text-red-600 rounded">Remove</button>
+                  )}
+                </div>
+              ))}
+              <div className="flex gap-2">
+                <button type="button" onClick={addVoyageField} className="px-3 py-1 text-xs bg-green-50 text-green-700 rounded">Add voyage</button>
+              </div>
+            </div>
           </div>
 
           <div>

@@ -117,7 +117,7 @@ const SHIPMENT_STATUSES = [
   { value: 'under_customs_cleared', label: 'Under Customs Clearance', color: 'green', icon: Flag },
   { value: 'customs_cleared', label: 'Customs Cleared', color: 'green', icon: Flag },
   { value: 'unloaded_from_vessel', label: 'Unloaded from Vessel', color: 'teal', icon: Anchor },
-  { value: 'out_for_delivery', label: 'Out for Delivery', color: 'orange', icon: Truck },
+  { value: 'out_for_delivery', label: 'Out for Delivery', color: 'red', icon: Truck },
   { value: 'delivered', label: 'Delivered', color: 'green', icon: CheckCircle },
   { value: 'on_hold', label: 'On Hold', color: 'yellow', icon: AlertCircle },
   { value: 'cancelled', label: 'Cancelled', color: 'red', icon: X },

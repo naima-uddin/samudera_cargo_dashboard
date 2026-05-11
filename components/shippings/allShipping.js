@@ -105,7 +105,7 @@ const COLORS = {
   purple: '#8b5cf6',
   pink: '#ec4899',
   indigo: '#6366f1',
-  orange: '#f97316',
+  red: '#f97316',
   teal: '#14b8a6',
   cyan: '#06b6d4',
   emerald: '#10b981'
@@ -133,7 +133,7 @@ const STATUS_CONFIG = {
   },
   received_at_warehouse: {
     label: 'Received at Warehouse',
-    color: 'bg-orange-50 text-orange-700 border-orange-200',
+    color: 'bg-red-50 text-red-700 border-red-200',
     icon: Package,
     progress: 20,
     editable: true,
@@ -190,7 +190,7 @@ const STATUS_CONFIG = {
   },
   dispatched: {
     label: 'Dispatched',
-    color: 'bg-orange-100 text-orange-700 border-orange-200',
+    color: 'bg-red-100 text-red-700 border-red-200',
     icon: Send,
     progress: 45,
     editable: true,
@@ -326,7 +326,7 @@ const STATUS_CONFIG = {
   },
   returned: {
     label: 'Returned',
-    color: 'bg-orange-50 text-orange-700 border-orange-200',
+    color: 'bg-red-50 text-red-700 border-red-200',
     icon: RotateCcw,
     progress: 0,
     editable: false,
@@ -402,7 +402,7 @@ const TRACKING_STATUS_CONFIG = {
   },
   out_for_delivery: {
     label: 'Out for Delivery',
-    color: 'bg-orange-100 text-red-600',
+    color: 'bg-red-100 text-red-600',
     icon: Navigation
   },
   delivered: {
@@ -431,7 +431,7 @@ const SHIPMENT_MODE_COLORS = {
   sea_freight: COLORS.secondary,
   road_freight: COLORS.success,
   rail_freight: COLORS.purple,
-  express_courier: COLORS.orange
+  express_courier: COLORS.red
 };
 
 // ==================== RETURN REQUEST STATUS CONFIGURATION ====================
@@ -462,9 +462,9 @@ const RETURN_STATUS_CONFIG = {
   },
   rejected_by_customer: {
     label: 'Cancelled by Customer',
-    color: 'bg-orange-100 text-orange-700 border-orange-200',
+    color: 'bg-red-100 text-red-700 border-red-200',
     icon: XCircle,
-    bgColor: 'bg-orange-50'
+    bgColor: 'bg-red-50'
   },
   completed: {
     label: 'Completed',
@@ -495,9 +495,9 @@ const Button = ({
   const baseClasses = 'rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center justify-center';
   
   const variants = {
-    primary: 'bg-red-600 text-white hover:bg-red-600 focus:ring-orange-500 shadow-sm',
+    primary: 'bg-red-600 text-white hover:bg-red-600 focus:ring-red-500 shadow-sm',
     secondary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-600',
-    outline: 'border-2 border-orange-500 text-orange-500 hover:bg-orange-50 focus:ring-orange-500',
+    outline: 'border-2 border-red-500 text-red-500 hover:bg-red-50 focus:ring-red-500',
     light: 'bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500',
     success: 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500',
     danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',

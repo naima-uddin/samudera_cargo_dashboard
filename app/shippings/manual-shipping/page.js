@@ -54,7 +54,7 @@ const STATUS_CONFIG = {
   },
   received_at_warehouse: {
     label: 'Received at Warehouse',
-    color: 'bg-orange-50 text-orange-700 border-orange-200',
+    color: 'bg-red-50 text-red-700 border-red-200',
     icon: Building2,
     progress: 10
   },
@@ -737,7 +737,7 @@ const UpdateStatusModal = ({
                     key={statusValue}
                     className={`
                       flex items-center p-3 rounded-lg border-2 border-dashed
-                      ${selectedStatus === statusValue ? "border-orange-500 bg-orange-50" : "border-yellow-400 bg-yellow-50"}
+                      ${selectedStatus === statusValue ? "border-red-500 bg-red-50" : "border-yellow-400 bg-yellow-50"}
                       hover:bg-yellow-100 cursor-pointer transition-all
                     `}
                   >
@@ -801,7 +801,7 @@ const UpdateStatusModal = ({
                   className={`
                     flex items-center p-3 rounded-lg border
                     ${current ? "border-blue-400 bg-blue-50" : ""}
-                    ${selectedStatus === statusValue ? "border-orange-500 bg-orange-50" : ""}
+                    ${selectedStatus === statusValue ? "border-red-500 bg-red-50" : ""}
                     ${disabled ? "opacity-60 bg-gray-50 cursor-not-allowed" : "hover:bg-gray-50 cursor-pointer"}
                   `}
                 >
@@ -868,7 +868,7 @@ const UpdateStatusModal = ({
                 type="date"
                 value={updateDate}
                 onChange={(e) => setUpdateDate(e.target.value)}
-                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 required
               />
             </div>
@@ -885,7 +885,7 @@ const UpdateStatusModal = ({
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               rows="3"
-              className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder={
                 normalizedCurrentStatus === 'on_hold'
                   ? "Reason for resuming or cancelling..."
@@ -909,7 +909,7 @@ const UpdateStatusModal = ({
       {/* CONFIRM MODAL */}
       <Modal isOpen={showConfirm} onClose={() => setShowConfirm(false)} title="Confirm Status Update" size="sm">
         <div className="text-center space-y-4">
-          <AlertTriangle className="h-12 w-12 text-orange-500 mx-auto" />
+          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto" />
           <div>
             <p className="text-sm text-gray-600">Change status from</p>
             <p className="text-lg font-semibold text-gray-900 my-1">
@@ -1236,7 +1236,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
             <div className={`
               px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap
               ${isCompleted ? 'bg-green-100 text-green-700' : ''}
-              ${isCurrent ? 'bg-orange-100 text-orange-700 border border-orange-300' : ''}
+              ${isCurrent ? 'bg-red-100 text-red-700 border border-red-300' : ''}
               ${!isCompleted && !isCurrent ? 'bg-gray-100 text-gray-500' : ''}
             `}>
               {status.label}
@@ -1275,7 +1275,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 placeholder="Enter container number"
                 value={newContainer.containerNumber}
                 onChange={(e) => setNewContainer({ ...newContainer, containerNumber: e.target.value })}
-                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 mb-2"
+                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-2"
               />
             </div>
 
@@ -1289,7 +1289,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 placeholder="Enter seal number"
                 value={newContainer.sealNumber}
                 onChange={(e) => setNewContainer({ ...newContainer, sealNumber: e.target.value })}
-                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 mb-2"
+                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-2"
               />
             </div>
 
@@ -1303,7 +1303,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 placeholder="Enter BL number"
                 value={newContainer.blNumber}
                 onChange={(e) => setNewContainer({ ...newContainer, blNumber: e.target.value })}
-                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 mb-2"
+                className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-2"
               />
             </div>
 
@@ -1316,7 +1316,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                   placeholder="Enter vessel name"
                   value={newTransport.vesselName}
                   onChange={(e) => setNewTransport({ ...newTransport, vesselName: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
               </div>
               <div>
@@ -1326,7 +1326,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                   placeholder="Enter voyage number"
                   value={newTransport.voyageNumber}
                   onChange={(e) => setNewTransport({ ...newTransport, voyageNumber: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
               </div>
             </div>
@@ -1348,7 +1348,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 {transportEntries.map((entry, index) => (
                   <div key={index} className="flex items-center justify-between bg-white p-2 rounded border border-amber-200">
                     <div className="flex-1">
-                      <p className="text-xs text-orange-600 font-medium">#{index + 1}</p>
+                      <p className="text-xs text-red-600 font-medium">#{index + 1}</p>
                       <p className="text-xs text-gray-700 mt-1">
                         <span className="font-medium">Vessel:</span> {entry.vesselName || 'N/A'}
                       </p>
@@ -1497,28 +1497,28 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                     placeholder="Name"
                     value={senderData?.name || ''}
                     onChange={(e) => handleSenderChange('name', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                   <input
                     type="text"
                     placeholder="Company"
                     value={senderData?.companyName || ''}
                     onChange={(e) => handleSenderChange('companyName', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                   <input
                     type="email"
                     placeholder="Email"
                     value={senderData?.email || ''}
                     onChange={(e) => handleSenderChange('email', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                   <input
                     type="text"
                     placeholder="Phone"
                     value={senderData?.phone || ''}
                     onChange={(e) => handleSenderChange('phone', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                 </div>
               )}
@@ -1582,34 +1582,34 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                     placeholder="Name"
                     value={receiverData?.name || ''}
                     onChange={(e) => handleReceiverChange('name', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                   <input
                     type="text"
                     placeholder="Company"
                     value={receiverData?.companyName || ''}
                     onChange={(e) => handleReceiverChange('companyName', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                   <input
                     type="email"
                     placeholder="Email"
                     value={receiverData?.email || ''}
                     onChange={(e) => handleReceiverChange('email', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                   <input
                     type="text"
                     placeholder="Phone"
                     value={receiverData?.phone || ''}
                     onChange={(e) => handleReceiverChange('phone', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                   <textarea
                     placeholder="Delivery Instructions"
                     value={receiverData?.deliveryInstructions || ''}
                     onChange={(e) => handleReceiverChange('deliveryInstructions', e.target.value)}
-                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+                    className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
                     rows="2"
                   />
                 </div>

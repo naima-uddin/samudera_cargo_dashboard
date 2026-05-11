@@ -1724,7 +1724,7 @@ export const getShipmentActions = (status) => {
 export const getStatusBadgeColor = (status) => {
   const colors = {
     'pending': 'bg-yellow-100 text-yellow-800',
-    'on_hold': 'bg-orange-100 text-orange-800',
+    'on_hold': 'bg-red-100 text-red-800',
     'cancelled': 'bg-red-100 text-red-800',
     'in_progress': 'bg-blue-100 text-blue-800',
     'consolidated': 'bg-purple-100 text-purple-800',

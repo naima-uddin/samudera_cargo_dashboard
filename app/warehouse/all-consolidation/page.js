@@ -86,7 +86,7 @@ const CONSOLIDATION_STATUSES = [
   { value: 'booking', label: 'Booking', color: 'gray', icon: FileText },
   { value: 'pending', label: 'Pending', color: 'blue', icon: Play },
   { value: 'picked_up_from_warehouse', label: 'Picked up from Warehouse', color: 'purple', icon: Package },
-  { value: 'loaded_into_container', label: 'Loaded into Container', color: 'orange', icon: Send },
+  { value: 'loaded_into_container', label: 'Loaded into Container', color: 'red', icon: Send },
   { value: 'container_sealed', label: 'Container Sealed', color: 'indigo', icon: Package },
   { value: 'departed_port_of_origin', label: 'Departed Port of Origin', color: 'amber', icon: Send },
   { value: 'in_transit_sea_freight', label: 'In Transit (Sea Freight)', color: 'yellow', icon: Truck },
@@ -96,7 +96,7 @@ const CONSOLIDATION_STATUSES = [
   { value: 'unloaded_from_vessel', label: 'Unloaded from Vessel', color: 'emerald', icon: Anchor },
   { value: 'out_for_delivery', label: 'Out for Delivery', color: 'blue', icon: Truck },
   { value: 'delivered', label: 'Delivered', color: 'emerald', icon: CheckCircle },
-  { value: 'on_hold', label: 'On Hold', color: 'orange', icon: Pause },
+  { value: 'on_hold', label: 'On Hold', color: 'red', icon: Pause },
   { value: 'cancelled', label: 'Cancelled', color: 'red', icon: Ban },
   { value: 'returned', label: 'Returned', color: 'red', icon: RotateCcw }
 ];
@@ -105,7 +105,7 @@ const CONSOLIDATION_TIMELINE_STATUS_STEPS = [
   { value: 'booking', label: 'Booking', color: 'gray', icon: FileText },
   { value: 'pending', label: 'Pending', color: 'blue', icon: Play },
   { value: 'picked_up_from_warehouse', label: 'Picked up from Warehouse', color: 'purple', icon: Package },
-  { value: 'loaded_into_container', label: 'Loaded into Container', color: 'orange', icon: Send },
+  { value: 'loaded_into_container', label: 'Loaded into Container', color: 'red', icon: Send },
   { value: 'container_sealed', label: 'Container Sealed', color: 'indigo', icon: Package },
   { value: 'departed_port_of_origin', label: 'Departed Port of Origin', color: 'amber', icon: Send },
   { value: 'in_transit_sea_freight', label: 'In Transit (Sea Freight)', color: 'yellow', icon: Truck },
@@ -115,7 +115,7 @@ const CONSOLIDATION_TIMELINE_STATUS_STEPS = [
   { value: 'unloaded_from_vessel', label: 'Unloaded from Vessel', color: 'emerald', icon: Anchor },
   { value: 'out_for_delivery', label: 'Out for Delivery', color: 'blue', icon: Truck },
   { value: 'delivered', label: 'Delivered', color: 'emerald', icon: CheckCircle },
-  { value: 'on_hold', label: 'On Hold', color: 'orange', icon: Pause },
+  { value: 'on_hold', label: 'On Hold', color: 'red', icon: Pause },
   { value: 'cancelled', label: 'Cancelled', color: 'red', icon: Ban },
   { value: 'returned', label: 'Returned', color: 'red', icon: RotateCcw }
 ];
@@ -213,7 +213,7 @@ const getStatusBadge = (status) => {
     gray: 'bg-gray-100 text-gray-800 border-gray-200',
     blue: 'bg-blue-100 text-blue-800 border-blue-200',
     purple: 'bg-purple-100 text-purple-800 border-purple-200',
-    orange: 'bg-orange-100 text-orange-800 border-orange-200',
+    red: 'bg-red-100 text-red-800 border-red-200',
     indigo: 'bg-indigo-100 text-indigo-800 border-indigo-200',
     amber: 'bg-amber-100 text-amber-800 border-amber-200',
     yellow: 'bg-yellow-100 text-yellow-800 border-yellow-200',
@@ -580,10 +580,10 @@ const ShipmentCard = ({ shipment, consolidationId, consolidationStatus, onShipme
       'customs_cleared': 'bg-emerald-100 text-emerald-700 border-emerald-200',
       'unloaded_from_vessel': 'bg-emerald-100 text-emerald-700 border-emerald-200',
       'out_for_delivery': 'bg-sky-100 text-sky-700 border-sky-200',
-      'dispatched': 'bg-orange-100 text-orange-700 border-orange-200',
+      'dispatched': 'bg-red-100 text-red-700 border-red-200',
       'container_sealed': 'bg-indigo-100 text-indigo-700 border-indigo-200',
       'pending': 'bg-yellow-100 text-yellow-700 border-yellow-200',
-      'on_hold': 'bg-orange-100 text-orange-700 border-orange-200',
+      'on_hold': 'bg-red-100 text-red-700 border-red-200',
       'cancelled': 'bg-red-100 text-red-700 border-red-200',
       'ready_for_dispatch': 'bg-purple-100 text-purple-700 border-purple-200',
       'loaded_in_container': 'bg-indigo-100 text-indigo-700 border-indigo-200'
@@ -774,7 +774,7 @@ const handleResume = async () => {
 
   const getCardStyles = () => {
     const status = currentStatus;
-    if (status === 'on_hold') return 'border-orange-300 bg-orange-50';
+    if (status === 'on_hold') return 'border-red-300 bg-red-50';
     if (status === 'cancelled') return 'border-red-300 bg-red-50';
     if (status === 'delivered') return 'border-green-300 bg-green-50';
     if (status === 'in_transit') return 'border-blue-200 bg-blue-50/30';
@@ -792,7 +792,7 @@ const handleResume = async () => {
       >
         <div className="flex items-center space-x-2 flex-1 min-w-0">
           <div className={`p-1.5 rounded-lg flex-shrink-0 ${
-            displayStatus === 'on_hold' ? 'bg-orange-100' :
+            displayStatus === 'on_hold' ? 'bg-red-100' :
             displayStatus === 'cancelled' ? 'bg-red-100' :
             displayStatus === 'delivered' ? 'bg-green-100' :
             displayStatus === 'departed_port_of_origin' || displayStatus === 'in_transit_sea_freight' ? 'bg-blue-100' :
@@ -1025,9 +1025,9 @@ const handleResume = async () => {
 
 // ==================== STAT CARD ====================
 
-const StatCard = ({ title, value, icon: Icon, color = 'orange', subtitle }) => {
+const StatCard = ({ title, value, icon: Icon, color = 'red', subtitle }) => {
   const colorClasses = {
-    orange: 'bg-orange-50 text-red-600 border-orange-200',
+    red: 'bg-red-50 text-red-600 border-red-200',
     blue: 'bg-blue-50 text-blue-600 border-blue-200',
     green: 'bg-green-50 text-green-600 border-green-200',
     purple: 'bg-purple-50 text-purple-600 border-purple-200'
@@ -1317,7 +1317,7 @@ const ConsolidationCard = ({
         return (
           <button
             onClick={() => onUnderCustomsCleared(consolidation)}
-            className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-orange-700 flex items-center whitespace-nowrap"
+            className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700 flex items-center whitespace-nowrap"
           >
             <Shield className="h-3 w-3 mr-1" />
             Under Customs Clearance
@@ -1459,8 +1459,8 @@ const ConsolidationCard = ({
           <p className="text-xs font-medium text-gray-800 truncate">{origin}</p>
         </div>
         <div className="px-2">
-          <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
-            <ChevronRight className="h-4 w-4 text-orange-500" />
+          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+            <ChevronRight className="h-4 w-4 text-red-500" />
           </div>
         </div>
         <div className="flex-1 text-right">
@@ -1522,25 +1522,25 @@ const ConsolidationCard = ({
 
     {/* ========== JOURNEY PROGRESS SECTION - IMPROVED ========== */}
     {/* ========== JOURNEY PROGRESS SECTION - COLLAPSIBLE ========== */}
-  <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border border-orange-100 overflow-hidden shadow-sm">
+  <div className="bg-gradient-to-br from-red-50 to-amber-50 rounded-2xl border border-red-100 overflow-hidden shadow-sm">
   
   {/* Header - Always visible */}
   <button
     onClick={() => setIsJourneyExpanded(!isJourneyExpanded)}
-    className="w-full p-3.5 flex items-center justify-between hover:bg-orange-100/50 transition-colors"
+    className="w-full p-3.5 flex items-center justify-between hover:bg-red-100/50 transition-colors"
   >
     <div className="flex items-center space-x-2">
-      <div className="p-1 bg-orange-200 rounded-lg">
-        <TrendingUp className="h-3.5 w-3.5 text-orange-700" />
+      <div className="p-1 bg-red-200 rounded-lg">
+        <TrendingUp className="h-3.5 w-3.5 text-red-700" />
       </div>
-      <span className="text-xs font-bold text-orange-800">Journey Progress</span>
+      <span className="text-xs font-bold text-red-800">Journey Progress</span>
       
       {/* Mini Progress Indicator when collapsed */}
       {!isJourneyExpanded && (
         <div className="flex items-center space-x-1 ml-2">
           <div className="w-16 bg-gray-200 rounded-full h-1">
             <div 
-              className="bg-gradient-to-r from-orange-500 to-amber-500 h-1 rounded-full"
+              className="bg-gradient-to-r from-red-500 to-amber-500 h-1 rounded-full"
               style={{ width: `${((currentStepIndex + 1) / statusSteps.length) * 100}%` }}
             />
           </div>
@@ -1554,8 +1554,8 @@ const ConsolidationCard = ({
     <div className="flex items-center space-x-2">
       {/* Step indicator when collapsed */}
       {!isJourneyExpanded && (
-        <div className="bg-orange-200/50 px-1.5 py-0.5 rounded-full">
-          <span className="text-[8px] font-semibold text-orange-700">
+        <div className="bg-red-200/50 px-1.5 py-0.5 rounded-full">
+          <span className="text-[8px] font-semibold text-red-700">
             {currentStepIndex + 1}/{statusSteps.length}
           </span>
         </div>
@@ -1581,7 +1581,7 @@ const ConsolidationCard = ({
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
-            className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full transition-all duration-500"
+            className="bg-gradient-to-r from-red-500 to-amber-500 h-2 rounded-full transition-all duration-500"
             style={{ width: `${((currentStepIndex + 1) / statusSteps.length) * 100}%` }}
           />
         </div>
@@ -1596,7 +1596,7 @@ const ConsolidationCard = ({
       <div className="bg-white/80 rounded-lg p-2.5 mb-3 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="p-1.5 bg-orange-100 rounded-full">
+            <div className="p-1.5 bg-red-100 rounded-full">
               {(() => {
                 const currentStep = statusSteps[currentStepIndex];
                 const Icon = currentStep?.icon || Package;
@@ -1644,16 +1644,16 @@ const ConsolidationCard = ({
         
         {/* Current Step */}
         <div>
-          <p className="text-[9px] font-semibold text-orange-700 mb-1.5 flex items-center">
+          <p className="text-[9px] font-semibold text-red-700 mb-1.5 flex items-center">
             <Activity className="h-2.5 w-2.5 mr-1" />
             Current
           </p>
-          <div className="bg-orange-100 rounded-full px-2.5 py-1 inline-flex items-center">
+          <div className="bg-red-100 rounded-full px-2.5 py-1 inline-flex items-center">
             {(() => {
               const StepIcon = statusSteps[currentStepIndex]?.icon || Package;
-              return <StepIcon className="h-2.5 w-2.5 text-orange-700 mr-1.5" />;
+              return <StepIcon className="h-2.5 w-2.5 text-red-700 mr-1.5" />;
             })()}
-            <span className="text-[9px] font-semibold text-orange-800">
+            <span className="text-[9px] font-semibold text-red-800">
               {statusSteps[currentStepIndex]?.label || consolidation.status?.replace(/_/g, ' ')}
             </span>
           </div>
@@ -1683,9 +1683,9 @@ const ConsolidationCard = ({
       
       {/* Special Status Warnings */}
       {journeyStatus === 'on_hold' && (
-        <div className="mt-3 bg-orange-200/50 p-2 rounded-lg flex items-start border border-orange-300">
-          <AlertCircle className="h-3.5 w-3.5 text-orange-700 mr-2 mt-0.5 flex-shrink-0" />
-          <p className="text-[10px] text-orange-800">
+        <div className="mt-3 bg-red-200/50 p-2 rounded-lg flex items-start border border-red-300">
+          <AlertCircle className="h-3.5 w-3.5 text-red-700 mr-2 mt-0.5 flex-shrink-0" />
+          <p className="text-[10px] text-red-800">
             <span className="font-semibold">On Hold:</span> This consolidation is temporarily paused. Resume when ready.
           </p>
         </div>
@@ -1701,7 +1701,7 @@ const ConsolidationCard = ({
       )}
 
       {journeyStatus !== 'cancelled' && journeyStatus !== 'completed' && (
-        <div className="pt-2 border-t border-orange-100">
+        <div className="pt-2 border-t border-red-100">
           <div className="grid grid-cols-2 gap-2">
             {journeyStatus === 'on_hold' ? (
               <button
@@ -1783,7 +1783,7 @@ const ConsolidationCard = ({
               {shipments.length} Shipment(s)
             </span>
             {shipments.filter(s => s.status === 'on_hold').length > 0 && (
-              <span className="px-1.5 py-0.5 bg-orange-100 text-orange-700 text-[9px] rounded-full">
+              <span className="px-1.5 py-0.5 bg-red-100 text-red-700 text-[9px] rounded-full">
                 {shipments.filter(s => s.status === 'on_hold').length} on hold
               </span>
             )}
@@ -1875,7 +1875,7 @@ const ConsolidationDetailsModal = ({
       { status: 'booking', label: 'Booking', icon: FileText, color: 'gray' },
       { status: 'pending', label: 'Pending', icon: Play, color: 'blue' },
       { status: 'picked_up_from_warehouse', label: 'Picked up from Warehouse', icon: Package, color: 'purple' },
-      { status: 'loaded_into_container', label: 'Loaded into Container', icon: Send, color: 'orange' },
+      { status: 'loaded_into_container', label: 'Loaded into Container', icon: Send, color: 'red' },
       { status: 'container_sealed', label: 'Container Sealed', icon: Shield, color: 'indigo' },
       { status: 'departed_port_of_origin', label: 'Departed Port of Origin', icon: Send, color: 'amber' },
       { status: 'in_transit_sea_freight', label: 'In Transit (Sea Freight)', icon: Truck, color: 'yellow' },
@@ -1891,7 +1891,7 @@ const ConsolidationDetailsModal = ({
       return [...baseSteps, { status: 'cancelled', label: 'Cancelled', icon: Ban, color: 'red' }];
     }
     if (journeyStatus === 'on_hold') {
-      return [...baseSteps, { status: 'on_hold', label: 'On Hold', icon: Pause, color: 'orange' }];
+      return [...baseSteps, { status: 'on_hold', label: 'On Hold', icon: Pause, color: 'red' }];
     }
     
     return baseSteps;
@@ -1961,7 +1961,7 @@ const ConsolidationDetailsModal = ({
               onReadyForDispatch(consolidation);
               onClose();
             }}
-            className="px-4 py-1.5 bg-red-600 text-white rounded-lg text-sm hover:bg-orange-700 flex items-center"
+            className="px-4 py-1.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 flex items-center"
           >
             <Send className="h-3 w-3 mr-1" />
             Ready
@@ -2179,7 +2179,7 @@ const ConsolidationDetailsModal = ({
 
               {/* ✅ Status Timeline - এখানে যোগ করুন (currentStepIndex এবং statusSteps ব্যবহার করে) */}
               {statusSteps.length > 0 && currentStepIndex >= 0 && (
-                <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-3 rounded-lg">
+                <div className="bg-gradient-to-r from-red-50 to-amber-50 p-3 rounded-lg">
                   <h4 className="text-xs font-semibold mb-2 flex items-center">
                     <TrendingUp className="h-3 w-3 mr-1 text-red-600" />
                     Journey Progress
@@ -2188,7 +2188,7 @@ const ConsolidationDetailsModal = ({
                   {/* Progress Bar */}
                   <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
                     <div 
-                      className="bg-gradient-to-r from-orange-500 to-amber-500 h-1.5 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-red-500 to-amber-500 h-1.5 rounded-full transition-all duration-500"
                       style={{ width: `${((currentStepIndex + 1) / statusSteps.length) * 100}%` }}
                     />
                   </div>
@@ -2197,7 +2197,7 @@ const ConsolidationDetailsModal = ({
                   <div className="bg-white/50 p-2 rounded-lg mb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <div className="p-1 bg-orange-100 rounded-full">
+                        <div className="p-1 bg-red-100 rounded-full">
                           {(() => {
                             const StepIcon = statusSteps[currentStepIndex]?.icon || Package;
                             return <StepIcon className="h-3 w-3 text-red-600" />;
@@ -2234,7 +2234,7 @@ const ConsolidationDetailsModal = ({
                             isCompleted 
                               ? 'bg-green-500 text-white' 
                               : isCurrent 
-                                ? 'bg-red-600 text-white ring-4 ring-orange-200'
+                                ? 'bg-red-600 text-white ring-4 ring-red-200'
                                 : 'bg-gray-200 text-gray-400'
                           }`}>
                             {isCompleted && idx < currentStepIndex ? (
@@ -2251,7 +2251,7 @@ const ConsolidationDetailsModal = ({
                               {step.label}
                             </p>
                             {isCurrent && (
-                              <span className="inline-block text-[9px] px-1.5 py-0.5 bg-orange-100 text-orange-700 rounded-full mt-0.5">
+                              <span className="inline-block text-[9px] px-1.5 py-0.5 bg-red-100 text-red-700 rounded-full mt-0.5">
                                 Current
                               </span>
                             )}
@@ -2572,7 +2572,7 @@ const TableRow = ({
 
     if (consolidation.status === 'consolidated') {
       buttons.push(
-        <button key="ready" onClick={() => onReadyForDispatch(consolidation)} className="p-1 hover:bg-orange-100 rounded text-red-600" title="Ready">
+        <button key="ready" onClick={() => onReadyForDispatch(consolidation)} className="p-1 hover:bg-red-100 rounded text-red-600" title="Ready">
           <Send className="h-3 w-3" />
         </button>
       );
@@ -2745,7 +2745,7 @@ const ListItem = ({
     >
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-2 flex-1 min-w-0">
-          <div className="p-2 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex-shrink-0">
+          <div className="p-2 bg-gradient-to-br from-red-500 to-amber-600 rounded-lg flex-shrink-0">
             <Container className="h-4 w-4 text-white" />
           </div>
           
@@ -3326,7 +3326,7 @@ const BulkActionsBar = ({ selectedCount, onClear, onBulkAction }) => {
     <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex items-center space-x-2 z-50 text-xs">
       <span className="font-medium px-2">{selectedCount} selected</span>
       <div className="h-3 w-px bg-gray-200" />
-      <button onClick={() => onBulkAction('ready')} className="px-2 py-1 bg-orange-50 text-red-600 rounded hover:bg-orange-100">
+      <button onClick={() => onBulkAction('ready')} className="px-2 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100">
         Ready
       </button>
       <button onClick={() => onBulkAction('dispatch')} className="px-2 py-1 bg-green-50 text-green-600 rounded hover:bg-green-100">
@@ -4315,7 +4315,7 @@ const ReadyForDispatchModal = ({ isOpen, onClose, consolidation, onSuccess }) =>
           <button
             onClick={handleMarkAsReady}
             disabled={loading}
-            className="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-orange-700 disabled:bg-gray-300 flex items-center"
+            className="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 flex items-center"
           >
             {loading ? (
               <>

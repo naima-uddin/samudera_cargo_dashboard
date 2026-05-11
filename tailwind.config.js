@@ -14,7 +14,7 @@ module.exports = {
         third: '#1D2D52',
         fourth: '#0E2047',
         fifth: '#4b5563',
-        orange: {
+        red: {
           50: '#fff1f1',
           100: '#ffe0e0',
           200: '#ffbcbc',

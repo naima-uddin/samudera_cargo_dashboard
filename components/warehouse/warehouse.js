@@ -104,7 +104,7 @@ const ZONE_COLORS = {
   'W': { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200' },
   'A': { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200' },
   'L': { bg: 'bg-indigo-100', text: 'text-indigo-700', border: 'border-indigo-200' },
-  'Y20': { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200' },
+  'Y20': { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' },
   'Y40': { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' },
   'B': { bg: 'bg-teal-100', text: 'text-teal-700', border: 'border-teal-200' },
   'T': { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-200' },
@@ -943,7 +943,7 @@ const WarehouseModal = ({ shipment, receipt, mode, onClose, onComplete }) => {
             </div>
 
             {/* Shipment Summary */}
-            <div className="bg-orange-50 rounded-lg p-4 mb-4">
+            <div className="bg-red-50 rounded-lg p-4 mb-4">
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
                   <span className="text-gray-500 text-xs">Tracking Number:</span>

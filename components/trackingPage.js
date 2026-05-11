@@ -45,7 +45,7 @@ const STATUS_CONFIG = {
   'picked_up_from_warehouse': { label: 'Picked up from Warehouse', color: 'bg-blue-100 text-blue-800', icon: Truck, progress: 20, order: 2, stage: 'warehouse' },
   'loaded_into_container': { label: 'Loaded into Container', color: 'bg-blue-200 text-blue-800', icon: Container, progress: 30, order: 3, stage: 'dispatch' },
   'container_sealed': { label: 'Container Sealed', color: 'bg-blue-300 text-blue-900', icon: Shield, progress: 35, order: 4, stage: 'dispatch' },
-  'departed_port_of_origin': { label: 'Departed Port of Origin', color: 'bg-orange-100 text-orange-800', icon: Ship, progress: 40, order: 5, stage: 'transit' },
+  'departed_port_of_origin': { label: 'Departed Port of Origin', color: 'bg-red-100 text-red-800', icon: Ship, progress: 40, order: 5, stage: 'transit' },
   'in_transit_sea_freight': { label: 'In Transit (Sea Freight)', color: 'bg-amber-100 text-amber-800', icon: Ship, progress: 50, order: 6, stage: 'transit' },
   'arrived_at_destination_port': { label: 'Arrived at Destination Port', color: 'bg-green-100 text-green-800', icon: Flag, progress: 60, order: 7, stage: 'arrival' },
   'under_customs_clearance': { label: 'Under Customs Clearance', color: 'bg-blue-100 text-blue-800', icon: Shield, progress: 70, order: 8, stage: 'customs' },

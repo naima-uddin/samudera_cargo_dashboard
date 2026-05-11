@@ -69,7 +69,7 @@ const STATUS_COLORS = {
 const CONDITION_COLORS = {
   'Minor Damage': { bg: 'bg-yellow-100', text: 'text-yellow-700', icon: AlertTriangle },
   'Major Damage': { bg: 'bg-red-100', text: 'text-red-700', icon: AlertOctagon },
-  'Partial': { bg: 'bg-orange-100', text: 'text-orange-700', icon: AlertTriangle },
+  'Partial': { bg: 'bg-red-100', text: 'text-red-700', icon: AlertTriangle },
   'Shortage': { bg: 'bg-blue-100', text: 'text-blue-700', icon: Package }
 };
 
@@ -77,7 +77,7 @@ const DISPOSITION_COLORS = {
   quarantine: { bg: 'bg-purple-100', text: 'text-purple-700', icon: Shield },
   scrap: { bg: 'bg-red-100', text: 'text-red-700', icon: Trash2 },
   return: { bg: 'bg-blue-100', text: 'text-blue-700', icon: Package },
-  rework: { bg: 'bg-orange-100', text: 'text-orange-700', icon: Edit },
+  rework: { bg: 'bg-red-100', text: 'text-red-700', icon: Edit },
   insurance: { bg: 'bg-green-100', text: 'text-green-700', icon: DollarSign },
   restock: { bg: 'bg-teal-100', text: 'text-teal-700', icon: Package }
 };
@@ -91,7 +91,7 @@ const StatCard = ({ title, value, icon: Icon, color = 'blue', trend, trendValue,
     green: 'bg-green-50 text-green-600',
     yellow: 'bg-yellow-50 text-yellow-600',
     purple: 'bg-purple-50 text-purple-600',
-    orange: 'bg-orange-50 text-red-600'
+    red: 'bg-red-50 text-red-600'
   };
 
   return (
@@ -173,7 +173,7 @@ const FilterBar = ({ filters, setFilters, total, onRefresh }) => {
           <button
             onClick={() => setShowAdvanced(!showAdvanced)}
             className={`p-2 border rounded-lg hover:bg-gray-50 transition-colors ${
-              showAdvanced ? 'bg-orange-50 border-orange-200' : ''
+              showAdvanced ? 'bg-red-50 border-red-200' : ''
             }`}
           >
             <SlidersHorizontal className="h-4 w-4 text-gray-600" />
@@ -1108,8 +1108,8 @@ export default function DamageReportsPage() {
 
           {/* Bulk Actions */}
           {selectedIds.length > 0 && (
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4 flex items-center justify-between">
-              <span className="text-sm text-orange-700">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex items-center justify-between">
+              <span className="text-sm text-red-700">
                 {selectedIds.length} reports selected
               </span>
               <div className="flex items-center space-x-2">
@@ -1121,7 +1121,7 @@ export default function DamageReportsPage() {
                 </button>
                 <button
                   onClick={() => setShowBulk(true)}
-                  className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-orange-700"
+                  className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
                 >
                   Bulk Update
                 </button>

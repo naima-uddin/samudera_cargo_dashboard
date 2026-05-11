@@ -132,9 +132,9 @@ const formatDateTime = (date) => {
 // ==================== COMPONENTS ====================
 
 // Stat Card Component
-const StatCard = ({ title, value, icon: Icon, color = 'orange', subtitle }) => {
+const StatCard = ({ title, value, icon: Icon, color = 'red', subtitle }) => {
   const colorClasses = {
-    orange: 'bg-orange-50 text-red-600',
+    red: 'bg-red-50 text-red-600',
     blue: 'bg-blue-50 text-blue-600',
     green: 'bg-green-50 text-green-600',
     yellow: 'bg-yellow-50 text-yellow-600',
@@ -360,12 +360,12 @@ const GroupCard = ({ group, onSelectShipments, onRemoveShipment }) => {
     <>
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-4 hover:shadow-lg transition-all">
         {/* Header */}
-        <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 border-b">
+        <div className="p-4 bg-gradient-to-r from-red-50 to-amber-50 border-b">
           <div className="flex items-start justify-between">
             <div className="flex items-start space-x-3 flex-1">
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="p-1 hover:bg-orange-200 rounded-lg transition-colors"
+                className="p-1 hover:bg-red-200 rounded-lg transition-colors"
               >
                 {expanded ? 
                   <ChevronUp className="h-5 w-5 text-red-600" /> : 
@@ -380,7 +380,7 @@ const GroupCard = ({ group, onSelectShipments, onRemoveShipment }) => {
                   <h2 className="text-lg font-semibold text-gray-900">
                     {group.displayName || `${group.origin || 'Unknown'} → ${group.destination || 'Unknown'}`}
                   </h2>
-                  <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">
+                  <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs rounded-full font-medium">
                     {group.count || shipments.length} Shipments
                   </span>
                 </div>
@@ -751,7 +751,7 @@ const CreateConsolidationModal = ({ isOpen, onClose, group, selectedShipments, o
 // Empty State
 const EmptyQueue = ({ onRefresh }) => (
   <div className="text-center py-16 bg-white rounded-xl border">
-    <div className="bg-orange-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+    <div className="bg-red-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
       <Package className="h-10 w-10 text-[#E67E22]" />
     </div>
     <h3 className="text-lg font-medium text-gray-900 mb-2">No shipments in queue</h3>
@@ -916,7 +916,7 @@ export default function ConsolidationQueuePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <StatCard title="Total Shipments" value={totalShipments} icon={Package} color="blue" />
             <StatCard title="Destination Groups" value={totalGroups} icon={Globe} color="green" />
-            <StatCard title="Total Volume" value={formatVolume(totalVolume)} icon={Box} color="orange" />
+            <StatCard title="Total Volume" value={formatVolume(totalVolume)} icon={Box} color="red" />
             <StatCard title="Total Weight" value={formatWeight(totalWeight)} icon={Weight} color="purple" />
           </div>
 

@@ -30,7 +30,7 @@ const STATUS_CONFIG = {
   'picked_up_from_warehouse': { label: 'Picked up from Warehouse', color: 'bg-blue-50 text-blue-700 border-blue-200' },
   'loaded_into_container': { label: 'Loaded into Container', color: 'bg-indigo-100 text-indigo-700 border-indigo-200' },
   'container_sealed': { label: 'Container Sealed', color: 'bg-blue-300 text-blue-900 border-blue-200' },
-  'departed_port_of_origin': { label: 'Departed Port of Origin', color: 'bg-orange-100 text-orange-700 border-orange-200' },
+  'departed_port_of_origin': { label: 'Departed Port of Origin', color: 'bg-red-100 text-red-700 border-red-200' },
   'in_transit_sea_freight': { label: 'In Transit (Sea Freight)', color: 'bg-blue-50 text-blue-700 border-blue-200' },
   'arrived_at_destination_port': { label: 'Arrived at Destination Port', color: 'bg-green-50 text-green-700 border-green-200' },
   'under_customs_clearance': { label: 'Under Customs Clearance', color: 'bg-blue-100 text-blue-800 border-blue-200' },
@@ -354,7 +354,7 @@ const handleSave = async (shipment) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center">
                   <Package className="h-4 w-4 text-[#E67E22]" />
                 </div>
                 <h1 className="ml-2 text-lg font-semibold text-gray-900">
@@ -402,7 +402,7 @@ const handleSave = async (shipment) => {
             title="Without Tracking"
             value={stats.withoutTracking}
             icon={AlertCircle}
-            color="bg-orange-50 text-red-600"
+            color="bg-red-50 text-red-600"
             onClick={() => filterByTracking('without')}
             active={activeFilter === 'without'}
           />

@@ -330,9 +330,9 @@ const getInvoiceTrackingNumber = (invoice) => {
 // ==================== COMPONENTS ====================
 
 // Stat Card Component
-const StatCard = ({ title, value, icon: Icon, color = 'orange', subtitle }) => {
+const StatCard = ({ title, value, icon: Icon, color = 'red', subtitle }) => {
   const colorClasses = {
-    orange: 'bg-orange-50 text-red-600',
+    red: 'bg-red-50 text-red-600',
     blue: 'bg-blue-50 text-blue-600',
     green: 'bg-green-50 text-green-600',
     yellow: 'bg-yellow-50 text-yellow-600',
@@ -381,7 +381,7 @@ const InvoiceCard = ({ invoice, onView, onEdit, onDelete, onMarkPaid, onPDF }) =
     <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-all mb-3">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center space-x-2">
-          <div className="p-2 bg-orange-50 rounded-lg">
+          <div className="p-2 bg-red-50 rounded-lg">
             <Receipt className="h-4 w-4 text-[#E67E22]" />
           </div>
           <div>
@@ -399,7 +399,7 @@ const InvoiceCard = ({ invoice, onView, onEdit, onDelete, onMarkPaid, onPDF }) =
       </div>
 
       <div className="flex items-center space-x-2 mb-3 p-2 bg-gray-50 rounded-lg">
-        <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center">
+        <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
           <span className="text-xs font-medium text-[#E67E22]">{invoice.customerInfo?.companyName?.charAt(0) || 'C'}</span>
         </div>
         <div className="flex-1">
@@ -475,7 +475,7 @@ const InvoiceTableRow = ({ invoice, onView, onEdit, onDelete, onMarkPaid, onPDF,
       </td>
       <td className="px-4 py-3">
         <div className="flex items-center space-x-2">
-          <div className="w-7 h-7 bg-orange-100 rounded-full flex items-center justify-center">
+          <div className="w-7 h-7 bg-red-100 rounded-full flex items-center justify-center">
             <span className="text-xs font-medium text-[#E67E22]">{invoice.customerInfo?.companyName?.charAt(0) || 'C'}</span>
           </div>
           <div>
@@ -541,7 +541,7 @@ const InvoiceDetailsModal = ({ isOpen, onClose, invoice, onMarkPaid, onPDF, onSe
         <div className="sticky top-0 bg-white border-b p-6">
           <div className="flex justify-between items-start">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-orange-100 rounded-lg"><Receipt className="h-6 w-6 text-[#E67E22]" /></div>
+              <div className="p-2 bg-red-100 rounded-lg"><Receipt className="h-6 w-6 text-[#E67E22]" /></div>
               <div>
                 <h2 className="text-xl font-bold">{invoice.invoiceNumber}</h2>
                 <p className="text-sm text-gray-500 mt-1">Created on {formatDateTime(invoice.createdAt)}</p>
@@ -745,7 +745,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, invoice }) => {
 // Empty State
 const EmptyState = ({ onRefresh }) => (
   <div className="text-center py-16 bg-white rounded-xl border">
-    <div className="bg-orange-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"><Receipt className="h-10 w-10 text-[#E67E22]" /></div>
+    <div className="bg-red-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"><Receipt className="h-10 w-10 text-[#E67E22]" /></div>
     <h3 className="text-lg font-medium text-gray-900 mb-2">No invoices found</h3>
     <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">Create your first Bookings to get started with billing and payment tracking.</p>
     <div className="flex items-center justify-center space-x-3">
@@ -1025,7 +1025,7 @@ const handleDeleteInvoice = async (invoiceId) => {
         </div>
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {/* <StatCard title="Total Invoices" value={summary.total} icon={Receipt} color="orange" />
+          {/* <StatCard title="Total Invoices" value={summary.total} icon={Receipt} color="red" />
           <StatCard title="Paid" value={summary.paid} icon={CheckCircle} color="green" />
           <StatCard title="Pending" value={summary.pending} icon={Clock} color="yellow" /> */}
           <StatCard title="Total Amount" value={formatCurrency(summary.totalAmount, 'USD')} icon={DollarSign} color="blue" />

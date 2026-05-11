@@ -312,16 +312,16 @@ const handleReset = () => {
               <div 
                 onClick={() => setUserType('staff')}
                 className={`cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-                  userType === 'staff' ? 'ring-4 ring-orange-500' : ''
+                  userType === 'staff' ? 'ring-4 ring-red-500' : ''
                 }`}
               >
                 <div className={`bg-white rounded-2xl shadow-lg overflow-hidden ${
-                  userType === 'staff' ? 'border-4 border-orange-500' : 'border-2 border-transparent'
+                  userType === 'staff' ? 'border-4 border-red-500' : 'border-2 border-transparent'
                 }`}>
-                  <div className="bg-gradient-to-r from-orange-500 to-red-600 p-6">
+                  <div className="bg-gradient-to-r from-red-500 to-red-600 p-6">
                     <div className="flex justify-center">
                       <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-xl">
-                        <FaUserPlus className="text-5xl text-orange-500" />
+                        <FaUserPlus className="text-5xl text-red-500" />
                       </div>
                     </div>
                   </div>
@@ -331,7 +331,7 @@ const handleReset = () => {
                       Create a new operations or warehouse staff account for your team.
                     </p>
                     {userType === 'staff' && (
-                      <div className="mt-4 inline-flex items-center gap-2 text-orange-500 font-semibold">
+                      <div className="mt-4 inline-flex items-center gap-2 text-red-500 font-semibold">
                         <FaCheckCircle className="text-xl" />
                         <span>Selected</span>
                       </div>
@@ -385,15 +385,15 @@ const handleReset = () => {
                     onClick={() => setFormData(prev => ({ ...prev, role: 'operations' }))}
                     className={`flex-1 p-4 rounded-xl border-2 transition-all ${
                       formData.role === 'operations'
-                        ? 'border-orange-500 bg-orange-50'
-                        : 'border-gray-200 hover:border-orange-200'
+                        ? 'border-red-500 bg-red-50'
+                        : 'border-gray-200 hover:border-red-200'
                     }`}
                   >
                     <FaUsers className={`text-2xl mx-auto mb-2 ${
-                      formData.role === 'operations' ? 'text-orange-500' : 'text-gray-400'
+                      formData.role === 'operations' ? 'text-red-500' : 'text-gray-400'
                     }`} />
                     <span className={`font-medium ${
-                      formData.role === 'operations' ? 'text-orange-700' : 'text-gray-600'
+                      formData.role === 'operations' ? 'text-red-700' : 'text-gray-600'
                     }`}>Operations</span>
                   </button> */}
                   <button
@@ -401,15 +401,15 @@ const handleReset = () => {
                     onClick={() => setFormData(prev => ({ ...prev, role: 'warehouse' }))}
                     className={`flex-1 p-4 rounded-xl border-2 transition-all ${
                       formData.role === 'warehouse'
-                        ? 'border-orange-500 bg-orange-50'
-                        : 'border-gray-200 hover:border-orange-200'
+                        ? 'border-red-500 bg-red-50'
+                        : 'border-gray-200 hover:border-red-200'
                     }`}
                   >
                     <FaBuilding className={`text-2xl mx-auto mb-2 ${
-                      formData.role === 'warehouse' ? 'text-orange-500' : 'text-gray-400'
+                      formData.role === 'warehouse' ? 'text-red-500' : 'text-gray-400'
                     }`} />
                     <span className={`font-medium ${
-                      formData.role === 'warehouse' ? 'text-orange-700' : 'text-gray-600'
+                      formData.role === 'warehouse' ? 'text-red-700' : 'text-gray-600'
                     }`}>Warehouse</span>
                   </button>
                 </div>
@@ -642,14 +642,14 @@ const handleReset = () => {
           <div className="mt-8">
             <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-inner">
               <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <FaCheckCircle className={`text-2xl ${userType === 'admin' ? 'text-blue-500' : 'text-orange-500'}`} />
+                <FaCheckCircle className={`text-2xl ${userType === 'admin' ? 'text-blue-500' : 'text-red-500'}`} />
                 Review Your Information
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
+                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-red-100'}`}>
                       <BsPersonBadge className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
@@ -659,7 +659,7 @@ const handleReset = () => {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
+                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-red-100'}`}>
                       <MdEmail className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
@@ -669,7 +669,7 @@ const handleReset = () => {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
+                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-red-100'}`}>
                       <MdPhone className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
@@ -681,7 +681,7 @@ const handleReset = () => {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
+                    <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-red-100'}`}>
                       <FaBriefcase className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
@@ -692,7 +692,7 @@ const handleReset = () => {
 
                   {(userType === 'admin' || formData.department) && (
                     <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
+                      <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-red-100'}`}>
                         <FaBuilding className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                       </div>
                       <div>
@@ -717,7 +717,7 @@ const handleReset = () => {
                           className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${
                             userType === 'admin'
                               ? 'bg-blue-100 text-blue-700'
-                              : 'bg-orange-100 text-orange-700'
+                              : 'bg-red-100 text-red-700'
                           }`}
                         >
                           {perm?.icon}
@@ -772,7 +772,7 @@ const handleReset = () => {
                       index <= activeStep
                         ? userType === 'admin'
                           ? 'bg-blue-500 text-white shadow-lg shadow-blue-200'
-                          : 'bg-red-600 text-white shadow-lg shadow-orange-200'
+                          : 'bg-red-600 text-white shadow-lg shadow-red-200'
                         : 'bg-gray-200 text-gray-500'
                     }`}>
                       {step.icon}
@@ -829,7 +829,7 @@ const handleReset = () => {
                     className={`flex items-center gap-2 px-8 py-3 rounded-lg font-medium text-white transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${
                       userType === 'admin'
                         ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-blue-200'
-                        : 'bg-gradient-to-r from-orange-500 to-red-600 hover:shadow-orange-200'
+                        : 'bg-gradient-to-r from-red-500 to-red-600 hover:shadow-red-200'
                     }`}
                   >
                     {loading ? (
@@ -851,7 +851,7 @@ const handleReset = () => {
                     className={`flex items-center gap-2 px-8 py-3 rounded-lg font-medium text-white transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
                       userType === 'admin'
                         ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-blue-200'
-                        : 'bg-gradient-to-r from-orange-500 to-red-600 hover:shadow-orange-200'
+                        : 'bg-gradient-to-r from-red-500 to-red-600 hover:shadow-red-200'
                     }`}
                   >
                     Next

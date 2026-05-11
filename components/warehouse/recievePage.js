@@ -37,7 +37,7 @@ const CONDITION_BADGES = {
   'Good': { bg: 'bg-green-100', text: 'text-green-700', icon: CheckCircle },
   'Damaged': { bg: 'bg-red-100', text: 'text-red-700', icon: AlertOctagon },
   'Partial': { bg: 'bg-yellow-100', text: 'text-yellow-700', icon: AlertOctagon },
-  'Minor Damage': { bg: 'bg-orange-100', text: 'text-orange-700', icon: AlertOctagon },
+  'Minor Damage': { bg: 'bg-red-100', text: 'text-red-700', icon: AlertOctagon },
   'Major Damage': { bg: 'bg-red-100', text: 'text-red-700', icon: AlertOctagon }
 };
 

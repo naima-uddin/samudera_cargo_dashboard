@@ -1769,7 +1769,7 @@ export const getReturnStatusColor = (status) => {
     'pending': 'yellow',
     'approved': 'blue',
     'rejected_by_admin': 'red',
-    'rejected_by_customer': 'orange',
+    'rejected_by_customer': 'red',
     'completed': 'green'
   };
   return statusColors[status] || 'gray';

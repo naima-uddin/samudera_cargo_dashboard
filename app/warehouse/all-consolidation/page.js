@@ -1402,17 +1402,7 @@ const ConsolidationCard = ({
             <span className="font-mono text-xs font-medium truncate text-white/90">
               Track: {firstShipment?.trackingNumber || (firstShipment?._id ? `SHP-${firstShipment._id?.slice(-6)}` : 'N/A')}
             </span>
-            {(firstShipment?.transport?.vesselName || firstShipment?.shipmentDetails?.vesselName || consolidation?.vesselName) && (
-              <span className="text-[10px] px-2 py-0.5 rounded bg-white/20 text-white/90">
-                {firstShipment?.transport?.vesselName || firstShipment?.shipmentDetails?.vesselName || consolidation?.vesselName}
-                {firstShipment && ((firstShipment?.transport?.voyageNumber || firstShipment?.shipmentDetails?.voyageNumber || consolidation?.voyageNumber) ? ` • ${firstShipment?.transport?.voyageNumber || firstShipment?.shipmentDetails?.voyageNumber || consolidation?.voyageNumber}` : '')}
-              </span>
-            )}
-            {((firstShipment?.containers && firstShipment.containers.some(c=>c?.blNumber)) || firstShipment?.blNumber || consolidation?.blNumber) && (
-              <span className="text-[10px] px-2 py-0.5 rounded bg-white/20 text-white/90 ml-2">
-                BL: { (firstShipment?.containers ? firstShipment.containers.map(c=>c?.blNumber).filter(Boolean).join(', ') : (firstShipment?.blNumber || consolidation?.blNumber)) }
-              </span>
-            )}
+           
           </div>
         </div>
       </div>

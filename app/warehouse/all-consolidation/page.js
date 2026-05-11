@@ -5528,11 +5528,6 @@ export default function ConsolidationsPage() {
     loadStats();
   }, []);
 
-  // Apply filters whenever filters change
-  useEffect(() => {
-    applyFilters();
-  }, [applyFilters]);
-
   const loadConsolidations = async () => {
     setLoading(true);
     try {
@@ -5609,6 +5604,11 @@ export default function ConsolidationsPage() {
     setFilteredConsolidations(filtered);
     console.log('Filtered count:', filtered.length);
   }, [allConsolidations, filters]);
+
+  // Apply filters after the memoized function exists
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const loadStats = async () => {
     try {

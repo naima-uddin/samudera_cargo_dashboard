@@ -2849,49 +2849,141 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
 
   useEffect(() => {
     if (consolidation) {
-      const existingContainers = consolidation.containerNumbers || (consolidation.containerNumber ? consolidation.containerNumber.split(',').map(s => s.trim()) : []);
-      const existingSeals = consolidation.sealNumbers || (consolidation.sealNumber ? consolidation.sealNumber.split(',').map(s => s.trim()) : []);
-      const existingBLs = consolidation.blNumbers || (consolidation.blNumber ? consolidation.blNumber.split(',').map(s => s.trim()) : []);
-      // If consolidation has no explicit container/seal/bl arrays, try to infer from linked shipments
+      const getValues = (val) => {
+        if (!val) return [];
+        return Array.isArray(val)
+          ? val.map(v => (v || '').toString().trim()).filter(Boolean)
+          : val.toString().split(',').map(v => v.trim()).filter(Boolean);
+      };
+
+      const existingContainers = [
+        ...getValues(consolidation.containerNumbers),
+        ...getValues(consolidation.containerNumber),
+        ...getValues(consolidation.container),
+        ...getValues(consolidation.containerNo)
+      ];
+
+      const existingSeals = [
+        ...getValues(consolidation.sealNumbers),
+        ...getValues(consolidation.sealNumber),
+        ...getValues(consolidation.seal),
+        ...getValues(consolidation.sealNo)
+      ];
+
+      const existingBLs = [
+        ...getValues(consolidation.blNumbers),
+        ...getValues(consolidation.blNumber)
+      ];
+
+      const existingVessels = [
+        ...getValues(consolidation.vesselNames),
+        ...getValues(consolidation.vesselName),
+        ...getValues(consolidation.vesselNumber),
+        ...getValues(consolidation.vasselName),
+        ...getValues(consolidation.vasselNumber),
+        ...getValues(consolidation.transportEntries?.map(t => t?.vesselName || t?.vesselNumber).filter(Boolean)),
+        ...getValues(consolidation.carrier?.vesselName),
+        ...getValues(consolidation.carrier?.vesselNumber)
+      ];
+
+      const existingVoyages = [
+        ...getValues(consolidation.voyageNumbers),
+        ...getValues(consolidation.voyageNumber),
+        ...getValues(consolidation.voyageNo),
+        ...getValues(consolidation.voyagNumber),
+        ...getValues(consolidation.voyagNo),
+        ...getValues(consolidation.transportEntries?.map(t => t?.voyageNumber || t?.voyagNumber).filter(Boolean)),
+        ...getValues(consolidation.carrier?.voyageNumber)
+      ];
+
       let inferredContainers = [];
       let inferredSeals = [];
       let inferredBLs = [];
       let inferredVessels = [];
       let inferredVoyages = [];
 
-      if ((!existingContainers || existingContainers.length === 0) && Array.isArray(consolidation.shipments) && consolidation.shipments.length > 0) {
+      if (Array.isArray(consolidation.shipments) && consolidation.shipments.length > 0) {
         consolidation.shipments.forEach(s => {
           if (!s) return;
           // shipment may be populated object or just an id
           const shipment = typeof s === 'object' ? s : null;
           const fromDetails = shipment?.shipmentDetails;
 
-          const getValues = (val) => {
-            if (!val) return [];
-            return Array.isArray(val) ? val.map(v => (v || '').toString().trim()) : val.toString().split(',').map(v => v.trim());
-          };
+          inferredContainers.push(...getValues(shipment?.containerNumbers));
+          inferredContainers.push(...getValues(shipment?.containerNumber || fromDetails?.containerNumber || shipment?.container || shipment?.containerNo || fromDetails?.container || fromDetails?.containerNo));
 
-          inferredContainers.push(...getValues(shipment?.containerNumber || fromDetails?.containerNumber || shipment?.container || shipment?.containerNo));
-          inferredSeals.push(...getValues(shipment?.sealNumber || fromDetails?.sealNumber || shipment?.seal || shipment?.sealNo));
-          inferredBLs.push(...getValues(shipment?.blNumber || fromDetails?.blNumber || shipment?.blNumber));
+          inferredSeals.push(...getValues(shipment?.sealNumbers));
+          inferredSeals.push(...getValues(shipment?.sealNumber || fromDetails?.sealNumber || shipment?.seal || shipment?.sealNo || fromDetails?.seal || fromDetails?.sealNo));
 
-          inferredVessels.push((shipment?.transport?.vesselName) || fromDetails?.vesselName || shipment?.vesselName || '');
-          inferredVoyages.push((shipment?.transport?.voyageNumber) || fromDetails?.voyageNumber || shipment?.voyageNumber || '');
+          inferredBLs.push(...getValues(shipment?.blNumbers));
+          inferredBLs.push(...getValues(shipment?.blNumber || fromDetails?.blNumber));
+
+          inferredVessels.push(...getValues(shipment?.vesselNames));
+          inferredVessels.push(...getValues(shipment?.transportEntries?.map(t => t?.vesselName).filter(Boolean)));
+          inferredVessels.push(...getValues(
+            shipment?.transport?.vesselName ||
+            shipment?.transport?.vesselNumber ||
+            fromDetails?.vesselName ||
+            fromDetails?.vesselNumber ||
+            shipment?.vesselName ||
+            shipment?.vesselNumber ||
+            shipment?.vasselName ||
+            shipment?.vasselNumber
+          ));
+
+          inferredVoyages.push(...getValues(shipment?.voyageNumbers));
+          inferredVoyages.push(...getValues(shipment?.transportEntries?.map(t => t?.voyageNumber || t?.voyagNumber).filter(Boolean)));
+          inferredVoyages.push(...getValues(
+            shipment?.transport?.voyageNumber ||
+            shipment?.transport?.voyagNumber ||
+            fromDetails?.voyageNumber ||
+            fromDetails?.voyagNumber ||
+            shipment?.voyageNumber ||
+            shipment?.voyagNumber ||
+            shipment?.voyageNo ||
+            shipment?.voyagNo
+          ));
         });
-
-        // dedupe
-        inferredContainers = [...new Set(inferredContainers.filter(Boolean))];
-        inferredSeals = [...new Set(inferredSeals.filter(Boolean))];
-        inferredBLs = [...new Set(inferredBLs.filter(Boolean))];
-        inferredVessels = [...new Set(inferredVessels.filter(Boolean))];
-        inferredVoyages = [...new Set(inferredVoyages.filter(Boolean))];
       }
 
-      const finalContainers = (existingContainers && existingContainers.length) ? existingContainers : (inferredContainers.length ? inferredContainers : ['']);
-      const finalSeals = (existingSeals && existingSeals.length) ? existingSeals : (inferredSeals.length ? inferredSeals : ['']);
-      const finalBLs = (existingBLs && existingBLs.length) ? existingBLs : (inferredBLs.length ? inferredBLs : ['']);
-      const finalVessels = (consolidation.vesselNames && consolidation.vesselNames.length) ? consolidation.vesselNames : (consolidation.vesselName ? consolidation.vesselName.toString().split(',').map(s=>s.trim()) : (inferredVessels.length ? inferredVessels : ['']));
-      const finalVoyages = (consolidation.voyageNumbers && consolidation.voyageNumbers.length) ? consolidation.voyageNumbers : (consolidation.voyageNumber ? consolidation.voyageNumber.toString().split(',').map(s=>s.trim()) : (inferredVoyages.length ? inferredVoyages : ['']));
+      // Extract auto-generated values from timeline notes when available.
+      if (Array.isArray(consolidation.timeline)) {
+        consolidation.timeline.forEach((ev) => {
+          const description = (ev?.description || ev?.notes || '').toString();
+          if (!description) return;
+
+          const containerMatch = description.match(/container\s*(assigned|number)?\s*:\s*([^,\n]+)/i);
+          if (containerMatch?.[2]) inferredContainers.push(containerMatch[2].trim());
+
+          const sealMatch = description.match(/seal\s*(added|number)?\s*:\s*([^,\n]+)/i);
+          if (sealMatch?.[2]) inferredSeals.push(sealMatch[2].trim());
+
+          const vesselMatch = description.match(/vessel\s*(name|number)?\s*:\s*([^,\n]+)/i);
+          if (vesselMatch?.[2]) inferredVessels.push(vesselMatch[2].trim());
+
+          const voyageMatch = description.match(/voyage\s*(number)?\s*:\s*([^,\n]+)/i);
+          if (voyageMatch?.[2]) inferredVoyages.push(voyageMatch[2].trim());
+        });
+      }
+
+      // dedupe
+      const dedupe = (arr) => [...new Set((arr || []).filter(Boolean).map(v => v.toString().trim()).filter(Boolean))];
+      const normalizedExistingContainers = dedupe(existingContainers);
+      const normalizedExistingSeals = dedupe(existingSeals);
+      const normalizedExistingBLs = dedupe(existingBLs);
+      const normalizedExistingVessels = dedupe(existingVessels);
+      const normalizedExistingVoyages = dedupe(existingVoyages);
+      inferredContainers = dedupe(inferredContainers);
+      inferredSeals = dedupe(inferredSeals);
+      inferredBLs = dedupe(inferredBLs);
+      inferredVessels = dedupe(inferredVessels);
+      inferredVoyages = dedupe(inferredVoyages);
+
+      const finalContainers = normalizedExistingContainers.length ? normalizedExistingContainers : (inferredContainers.length ? inferredContainers : ['']);
+      const finalSeals = normalizedExistingSeals.length ? normalizedExistingSeals : (inferredSeals.length ? inferredSeals : ['']);
+      const finalBLs = normalizedExistingBLs.length ? normalizedExistingBLs : (inferredBLs.length ? inferredBLs : ['']);
+      const finalVessels = normalizedExistingVessels.length ? normalizedExistingVessels : (inferredVessels.length ? inferredVessels : ['']);
+      const finalVoyages = normalizedExistingVoyages.length ? normalizedExistingVoyages : (inferredVoyages.length ? inferredVoyages : ['']);
 
       setFormData({
         containerNumbers: finalContainers,

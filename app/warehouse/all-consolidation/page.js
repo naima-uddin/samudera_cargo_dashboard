@@ -1377,7 +1377,7 @@ const ConsolidationCard = ({
   return (
     <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200 self-start h-fit ring-1 ring-black/5">
   {/* Header - Gradient with better contrast */}
-  <div className="p-4 bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-gray-800">
+  <div className="p-4 bg-gradient-to-r from-[#7B95B5] via-[#4B76AD] to-[#214D85] text-gray-800">
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-2">
         <div className="p-1 bg-white/20 rounded-lg">
@@ -1392,7 +1392,7 @@ const ConsolidationCard = ({
           </span>
         </div>
       </div>
-      <div className="bg-orange-500 backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-medium text-black">
+      <div className="bg-[#103A73] backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-medium text-white">
         {getMainTypeName(mainType)}
       </div>
     </div>

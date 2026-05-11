@@ -2848,6 +2848,8 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
     containerType: '',
     sealNumbers: [''],
     blNumbers: [''],
+    vesselName: '',
+    voyageNumber: '',
     estimatedDeparture: '',
     notes: ''
   });
@@ -2857,11 +2859,51 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
       const existingContainers = consolidation.containerNumbers || (consolidation.containerNumber ? consolidation.containerNumber.split(',').map(s => s.trim()) : []);
       const existingSeals = consolidation.sealNumbers || (consolidation.sealNumber ? consolidation.sealNumber.split(',').map(s => s.trim()) : []);
       const existingBLs = consolidation.blNumbers || (consolidation.blNumber ? consolidation.blNumber.split(',').map(s => s.trim()) : []);
+      // If consolidation has no explicit container/seal/bl arrays, try to infer from linked shipments
+      let inferredContainers = [];
+      let inferredSeals = [];
+      let inferredBLs = [];
+      let inferredVessel = '';
+      let inferredVoyage = '';
+
+      if ((!existingContainers || existingContainers.length === 0) && Array.isArray(consolidation.shipments) && consolidation.shipments.length > 0) {
+        consolidation.shipments.forEach(s => {
+          if (!s) return;
+          // shipment may be populated object or just an id
+          const shipment = typeof s === 'object' ? s : null;
+          const fromDetails = shipment?.shipmentDetails;
+
+          const getValues = (val) => {
+            if (!val) return [];
+            return Array.isArray(val) ? val.map(v => (v || '').toString().trim()) : val.toString().split(',').map(v => v.trim());
+          };
+
+          inferredContainers.push(...getValues(shipment?.containerNumber || fromDetails?.containerNumber || shipment?.container || shipment?.containerNo));
+          inferredSeals.push(...getValues(shipment?.sealNumber || fromDetails?.sealNumber || shipment?.seal || shipment?.sealNo));
+          inferredBLs.push(...getValues(shipment?.blNumber || fromDetails?.blNumber || shipment?.blNumber));
+
+          inferredVessel = inferredVessel || (shipment?.transport?.vesselName) || fromDetails?.vesselName || '';
+          inferredVoyage = inferredVoyage || (shipment?.transport?.voyageNumber) || fromDetails?.voyageNumber || '';
+        });
+
+        // dedupe
+        inferredContainers = [...new Set(inferredContainers.filter(Boolean))];
+        inferredSeals = [...new Set(inferredSeals.filter(Boolean))];
+        inferredBLs = [...new Set(inferredBLs.filter(Boolean))];
+      }
+
+      const finalContainers = (existingContainers && existingContainers.length) ? existingContainers : (inferredContainers.length ? inferredContainers : ['']);
+      const finalSeals = (existingSeals && existingSeals.length) ? existingSeals : (inferredSeals.length ? inferredSeals : ['']);
+      const finalBLs = (existingBLs && existingBLs.length) ? existingBLs : (inferredBLs.length ? inferredBLs : ['']);
+
       setFormData({
         containerNumbers: existingContainers.length ? existingContainers : [''],
         containerType: getContainerType(consolidation),
-        sealNumbers: existingSeals.length ? existingSeals : [''],
-        blNumbers: existingBLs.length ? existingBLs : [''],
+        sealNumbers: finalSeals,
+        blNumbers: finalBLs,
+        containerNumbers: finalContainers,
+        vesselName: consolidation.vesselName || consolidation.carrier?.vesselNumber || inferredVessel || '',
+        voyageNumber: consolidation.voyageNumber || inferredVoyage || '',
         estimatedDeparture: consolidation.estimatedDeparture?.split('T')[0] || '',
         notes: consolidation.notes || ''
       });
@@ -2909,6 +2951,8 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
         containerType: formData.containerType,
         sealNumber,
         blNumber,
+        vesselName: formData.vesselName || undefined,
+        voyageNumber: formData.voyageNumber || undefined,
         estimatedDeparture: formData.estimatedDeparture || undefined,
         notes: formData.notes,
         // include arrays for future-proofing
@@ -3006,6 +3050,7 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
               </div>
             </div>
           </div>
+
 
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">Seal Number(s)</label>

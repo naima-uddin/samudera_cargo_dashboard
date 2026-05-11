@@ -66,9 +66,9 @@ import {
 
 // ==================== COLOR CONSTANTS ====================
 const COLORS = {
-  primary: '#E67E22',
+  primary: '#F91616',
   secondary: '#3C719D',
-  primaryLight: '#fef2e6',
+  primaryLight: '#FA9991',
   secondaryLight: '#e8edf3',
   success: '#10b981',
   danger: '#ef4444',

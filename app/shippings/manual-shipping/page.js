@@ -27,9 +27,9 @@ import { useRouter } from 'next/navigation';
 
 // ==================== COLOR CONSTANTS ====================
 const COLORS = {
-  primary: '#E67E22',
-  primaryDark: '#d35400',
-  primaryLight: '#fef2e6',
+  primary: '#F91616',
+  primaryDark: '#BF0000',
+  primaryLight: '#FA9991',
   secondary: '#3C719D',
   success: '#10b981',
   danger: '#ef4444',

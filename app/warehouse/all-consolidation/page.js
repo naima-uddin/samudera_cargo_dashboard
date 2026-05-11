@@ -3,7 +3,7 @@
 // warehouse/consolidations/index.js
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -76,6 +76,8 @@ import {
   cancelConsolidation
 } from '@/services/consolidation';
 import { trackByNumber } from '@/services/booking';
+import { getShipmentById } from '@/services/shipping';
+import axiosInstance from '@/lib/axiosInstance';
 import { getAuthToken } from '@/utils/SessionHelper';
 
 // ==================== CONSTANTS ====================
@@ -837,6 +839,15 @@ const handleResume = async () => {
                 </span>
               )}
             </div>
+              {(shipment?.transport?.vesselName || shipment?.shipmentDetails?.vesselName || shipment?.vesselName) && (
+                <div className="text-[10px] text-gray-500 mt-1 flex items-center space-x-2">
+                  <span className="font-semibold text-[10px]">Vessel:</span>
+                  <span className="text-[10px] text-gray-700">{shipment?.transport?.vesselName || shipment?.shipmentDetails?.vesselName || shipment?.vesselName}</span>
+                  { (shipment?.transport?.voyageNumber || shipment?.shipmentDetails?.voyageNumber || shipment?.voyageNumber) && (
+                    <span className="ml-2 text-[10px] text-gray-600">Voyage: {shipment?.transport?.voyageNumber || shipment?.shipmentDetails?.voyageNumber || shipment?.voyageNumber}</span>
+                  )}
+                </div>
+              )}
           </div>
         </div>
         <div className="flex items-center space-x-2 flex-shrink-0">
@@ -1379,7 +1390,7 @@ const ConsolidationCard = ({
   {/* Header - Gradient with better contrast */}
   <div className="p-4 bg-gradient-to-r from-[#7B95B5] via-[#4B76AD] to-[#214D85] text-gray-800">
     <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2">
         <div className="p-1 bg-white/20 rounded-lg">
           <Container className="h-3.5 w-3.5" />
         </div>
@@ -1387,9 +1398,22 @@ const ConsolidationCard = ({
           <span className="font-mono text-xs font-semibold tracking-wide">
             {consolidation.consolidationNumber || consolidation._id?.slice(-6)}
           </span>
-          <span className="font-mono text-xs font-medium truncate text-white/90">
-            Track: {firstShipment?.trackingNumber || (firstShipment?._id ? `SHP-${firstShipment._id?.slice(-6)}` : 'N/A')}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-medium truncate text-white/90">
+              Track: {firstShipment?.trackingNumber || (firstShipment?._id ? `SHP-${firstShipment._id?.slice(-6)}` : 'N/A')}
+            </span>
+            {(firstShipment?.transport?.vesselName || firstShipment?.shipmentDetails?.vesselName || consolidation?.vesselName) && (
+              <span className="text-[10px] px-2 py-0.5 rounded bg-white/20 text-white/90">
+                {firstShipment?.transport?.vesselName || firstShipment?.shipmentDetails?.vesselName || consolidation?.vesselName}
+                {firstShipment && ((firstShipment?.transport?.voyageNumber || firstShipment?.shipmentDetails?.voyageNumber || consolidation?.voyageNumber) ? ` • ${firstShipment?.transport?.voyageNumber || firstShipment?.shipmentDetails?.voyageNumber || consolidation?.voyageNumber}` : '')}
+              </span>
+            )}
+            {((firstShipment?.containers && firstShipment.containers.some(c=>c?.blNumber)) || firstShipment?.blNumber || consolidation?.blNumber) && (
+              <span className="text-[10px] px-2 py-0.5 rounded bg-white/20 text-white/90 ml-2">
+                BL: { (firstShipment?.containers ? firstShipment.containers.map(c=>c?.blNumber).filter(Boolean).join(', ') : (firstShipment?.blNumber || consolidation?.blNumber)) }
+              </span>
+            )}
+          </div>
         </div>
       </div>
       <div className="bg-[#103A73] backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-medium text-white">
@@ -1824,8 +1848,6 @@ const ConsolidationDetailsModal = ({
   onComplete
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [shipments, setShipments] = useState([]);
-  const [items, setItems] = useState([]);
   const journeyStatus = normalizeConsolidationTimelineStatus(consolidation?.status);
 
   // ✅ Helper function to deduplicate shipments
@@ -1843,15 +1865,9 @@ const ConsolidationDetailsModal = ({
     });
   };
 
-  useEffect(() => {
-    if (consolidation) {
-      console.log('Details Modal - Consolidation:', consolidation);
-      const deduped = consolidation.shipments ? deduplicateShipments(consolidation.shipments) : [];
-      const items = consolidation.items || [];
-      setShipments(deduped);
-      setItems(items);
-    }
-  }, [consolidation]);
+  // derive shipments/items from consolidation to avoid synchronous setState in effect
+  const shipments = deduplicateShipments(consolidation?.shipments || []);
+  const items = consolidation?.items || [];
 
   // ✅ সব ভেরিয়েবল এখানে ডিফাইন করুন (useEffect এর পর, return এর আগে)
   const getStatusSteps = () => {
@@ -2817,7 +2833,17 @@ const ListItem = ({
               return (
                 <div key={idx} className="bg-gray-50 p-2 rounded text-[10px]">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono">{shipment.trackingNumber || `SHP-${idx + 1}`}</span>
+                    <div className="flex flex-col">
+                      <span className="font-mono">{shipment.trackingNumber || `SHP-${idx + 1}`}</span>
+                      <div className="flex items-center gap-2 mt-1">
+                        {(shipment?.transport?.vesselName || shipment?.shipmentDetails?.vesselName || shipment?.vesselName) && (
+                          <span className="text-[10px] px-1 py-0.5 rounded bg-white/50 text-gray-700">{shipment?.transport?.vesselName || shipment?.shipmentDetails?.vesselName || shipment?.vesselName}{(shipment?.transport?.voyageNumber || shipment?.shipmentDetails?.voyageNumber || shipment?.voyageNumber) ? ` • ${shipment?.transport?.voyageNumber || shipment?.shipmentDetails?.voyageNumber || shipment?.voyageNumber}` : ''}</span>
+                        )}
+                        {(shipment?.containers && shipment.containers.some(c=>c?.blNumber)) || shipment?.blNumber ? (
+                          <span className="text-[10px] px-1 py-0.5 rounded bg-white/50 text-gray-700">BL: {shipment?.containers ? shipment.containers.map(c=>c?.blNumber).filter(Boolean).join(', ') : shipment?.blNumber}</span>
+                        ) : null}
+                      </div>
+                    </div>
                     <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100">
                       {shipment.status?.replace(/_/g, ' ') || 'pending'}
                     </span>
@@ -2917,6 +2943,8 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
 
           inferredBLs.push(...getValues(shipment?.blNumbers));
           inferredBLs.push(...getValues(shipment?.blNumber || fromDetails?.blNumber));
+          inferredBLs.push(...getValues(shipment?.containers?.map(c => c?.blNumber).filter(Boolean)));
+          inferredBLs.push(...getValues(fromDetails?.containers?.map(c => c?.blNumber).filter(Boolean)));
 
           inferredVessels.push(...getValues(shipment?.vesselNames));
           inferredVessels.push(...getValues(shipment?.transportEntries?.map(t => t?.vesselName).filter(Boolean)));
@@ -2999,7 +3027,7 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
   }, [consolidation]);
 
   const genContainer = () => `CNTR-${Math.random().toString().slice(2,13).toUpperCase()}`;
-  const genSeal = () => `SEL-${Math.random().toString().slice(2,13).toUpperCase()}`;
+  const genSeal = () => `THSL26-${Math.random().toString().slice(2,8).toUpperCase()}`;
 
   const addContainerField = () => setFormData(prev => ({ ...prev, containerNumbers: [...prev.containerNumbers, ''] }));
   const removeContainerField = (i) => setFormData(prev => ({ ...prev, containerNumbers: prev.containerNumbers.filter((_, idx) => idx !== i) }));
@@ -3083,12 +3111,34 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl max-w-md w-full">
+      <div className="bg-white rounded-xl max-w-3xl w-full max-h-[80vh] overflow-hidden">
         <div className="p-4 border-b">
           <h3 className="text-base font-bold">Edit Consolidation</h3>
         </div>
         
-        <div className="p-4 space-y-3">
+        <div className="p-4 space-y-3 overflow-y-auto max-h-[65vh] pr-3">
+          {/* Sender / Receiver compact info */}
+          {consolidation?.shipments && consolidation.shipments.length > 0 && (
+            (() => {
+              const first = consolidation.shipments[0];
+              const sender = first?.sender || first?.shipmentDetails?.sender || consolidation?.sender;
+              const receiver = first?.receiver || first?.shipmentDetails?.receiver || consolidation?.receiver;
+              return (
+                <div className="grid grid-cols-2 gap-2 bg-gray-50 p-2 rounded text-[12px] border">
+                  <div>
+                    <p className="text-[10px] text-gray-500">Sender</p>
+                    <p className="font-medium text-sm truncate">{sender?.name || sender?.companyName || sender?.senderName || 'N/A'}</p>
+                    <p className="text-[10px] text-gray-400">{sender?.phone || sender?.email || ''}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-gray-500">Receiver</p>
+                    <p className="font-medium text-sm truncate">{receiver?.name || receiver?.companyName || receiver?.receiverName || 'N/A'}</p>
+                    <p className="text-[10px] text-gray-400">{receiver?.phone || receiver?.email || ''}</p>
+                  </div>
+                </div>
+              );
+            })()
+          )}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">Container Number(s)</label>
             <div className="space-y-2">
@@ -5481,7 +5531,7 @@ export default function ConsolidationsPage() {
   // Apply filters whenever filters change
   useEffect(() => {
     applyFilters();
-  }, [filters, allConsolidations]); // applyFilters is defined below but won't change during render
+  }, [applyFilters]);
 
   const loadConsolidations = async () => {
     setLoading(true);
@@ -5511,7 +5561,7 @@ export default function ConsolidationsPage() {
     }
   };
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...allConsolidations];
     
     // Apply search filter (client-side)
@@ -5558,7 +5608,7 @@ export default function ConsolidationsPage() {
     
     setFilteredConsolidations(filtered);
     console.log('Filtered count:', filtered.length);
-  };
+  }, [allConsolidations, filters]);
 
   const loadStats = async () => {
     try {
@@ -5611,10 +5661,67 @@ export default function ConsolidationsPage() {
     setShowDetailsModal(true);
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = async (id) => {
     const consolidation = allConsolidations.find(c => c._id === id);
     setSelectedConsolidation(consolidation);
     setShowEditModal(true);
+
+    // Fetch full consolidation details so edit modal can prefill shipment-sourced fields
+    // like vessel/voyage that may be absent in list payloads.
+    try {
+      const detailResult = await getConsolidationById(id);
+      if (detailResult?.success && detailResult?.data) {
+        const fullData = detailResult.data?.consolidation || detailResult.data;
+
+        // If shipments are present but not populated with transport/shipmentDetails,
+        // fetch each shipment by id as a fallback so vessel/voyage can be inferred.
+        if (Array.isArray(fullData.shipments) && fullData.shipments.length > 0) {
+          const needsFetch = fullData.shipments.some(s => {
+            const sh = typeof s === 'object' ? s : null;
+            return (!sh || (!sh.shipmentDetails && !sh.transport && !sh.vesselName && !sh.voyageNumber));
+          });
+
+          if (needsFetch) {
+            try {
+              const fetched = await Promise.all(fullData.shipments.map(async (s) => {
+                const id = typeof s === 'string' ? s : (s && (s._id || s));
+                if (!id) return s;
+
+                // Try normal shipment endpoint first
+                try {
+                  const res = await getShipmentById(id);
+                  if (res?.success && res?.data) return res.data;
+                } catch (e) {
+                  // ignore and try newShipment fallback
+                }
+
+                // Fallback: newShipment invoice endpoint returns { shipment, invoice }
+                try {
+                  const inv = await axiosInstance.get(`/shipments/${id}/invoice`);
+                  if (inv?.data?.success && inv.data.data) {
+                    return inv.data.data.shipment || inv.data.data;
+                  }
+                } catch (e) {
+                  // last resort: return minimal object
+                }
+
+                return (typeof s === 'object' ? s : { _id: id });
+              }));
+              fullData.shipments = fetched;
+            } catch (err) {
+              console.warn('Fallback shipment fetch failed', err);
+            }
+          }
+        }
+
+        setSelectedConsolidation(prev => ({
+          ...(prev || {}),
+          ...(fullData || {})
+        }));
+      }
+    } catch (error) {
+      console.warn('Failed to fetch full consolidation for edit prefill', error);
+    }
   };
 
   const handleDelete = async (id) => {

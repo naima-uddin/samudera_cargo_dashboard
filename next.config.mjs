@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  output: 'standalone', // Must use standalone for middleware support
+  output: 'export', // Static export mode
   trailingSlash: true,
   
   // Image Optimization - DISABLED for production

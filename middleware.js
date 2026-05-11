@@ -47,17 +47,12 @@ export function middleware(request) {
   return NextResponse.next();
 }
 
-// middleware কোথায় কাজ করবে
+// Middleware disabled for static export (output: 'export')
+// Middleware is only supported with 'standalone' or 'server' output modes
+/*
 export const config = {
   matcher: [
-    /*
-     * সব রাউটে কাজ করবে except:
-     * - api routes (API calls)
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico (favicon)
-     * - public folder এর ফাইল (.png, .jpg, .svg, .ico)
-     */
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.svg|.*\\.ico).*)',
   ],
 };
+*/

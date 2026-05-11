@@ -1579,24 +1579,7 @@ export default function CreateBooking() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <Input
-                    label="Vessel Name"
-                    name="shipmentDetails.vesselName"
-                    value={formData.shipmentDetails.vesselName}
-                    onChange={handleInputChange}
-                    placeholder="Enter vessel name"
-                    icon={Ship}
-                  />
-                  <Input
-                    label="Voyage Number"
-                    name="shipmentDetails.voyageNumber"
-                    value={formData.shipmentDetails.voyageNumber}
-                    onChange={handleInputChange}
-                    placeholder="Enter voyage number"
-                    icon={MapPin}
-                  />
-                </div>
+                
 
                 <div className="grid grid-cols-2 gap-3">
                   <Select

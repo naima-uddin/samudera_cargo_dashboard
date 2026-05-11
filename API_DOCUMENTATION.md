@@ -1,4 +1,4 @@
-# B2B Cargo Dashboard API Documentation
+# Samudera Cargo Cargo Dashboard API Documentation
 
 ## Overview
 This document describes the frontend API integration for `B2B_Cargo_Dashboard`.

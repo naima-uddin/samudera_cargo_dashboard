@@ -1,6 +1,6 @@
-# B2B Cargo Dashboard Postman Collection
+# Samudera Cargo Cargo Dashboard Postman Collection
 
-Generated from dashboard service wrappers. Use the B2B Cargo Dashboard environment with `baseUrl` set to your API server and `authToken` for auth header.
+Generated from dashboard service wrappers. Use the Samudera Cargo Cargo Dashboard environment with `baseUrl` set to your API server and `authToken` for auth header.
 
 ## Environment
 

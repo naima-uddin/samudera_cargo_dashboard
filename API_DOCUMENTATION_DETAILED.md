@@ -1,4 +1,4 @@
-# B2B Cargo Dashboard Detailed API Documentation
+# Samudera Cargo Cargo Dashboard Detailed API Documentation
 
 ## Overview
 This document covers every API route used by `B2B_Cargo_Dashboard`.

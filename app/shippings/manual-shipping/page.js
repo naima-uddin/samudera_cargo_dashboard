@@ -1307,7 +1307,55 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               />
             </div>
 
+             {/* Add Button */}
+            <Button 
+              type="button" 
+              size="sm" 
+              className="w-full mb-3 bg-red-500 text-white" 
+              onClick={addContainer}
+              icon={<Plus className="h-3 w-3" />}
+            >
+              Add Container/Seal/BL
+            </Button>
+
+            {/* List of Containers */}
+            {containerNumbers.length > 0 && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
+                <p className="text-xs text-gray-600 font-medium mb-2">Added Containers ({containerNumbers.length}):</p>
+                {containerNumbers.map((container, index) => (
+                  <div key={index} className="flex items-center justify-between bg-white p-2 rounded border border-blue-200">
+                    <div className="flex-1">
+                      <p className="text-xs text-red-600 font-medium">#{index + 1}</p>
+                      <p className="text-xs text-gray-700 mt-1">
+                        <span className="font-medium">Container:</span> {container.containerNumber}
+                      </p>
+                      <p className="text-xs text-gray-700">
+                        <span className="font-medium">Seal:</span> {container.sealNumber}
+                      </p>
+                      {container.blNumber && (
+                        <p className="text-xs text-gray-700">
+                          <span className="font-medium">BL:</span> {container.blNumber}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeContainer(index)}
+                      className="p-1 hover:bg-red-100 rounded transition-colors text-red-600 flex-shrink-0"
+                      title="Remove"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {containerNumbers.length === 0 && (
+              <p className="text-xs text-gray-500 text-center py-2">No containers added yet</p>
+            )}
+
             {/* Vessel and Voyage Inputs */}
+              <p className="text-sm font-medium text-gray-700 mb-3 flex items-center mt-6">Add Vessel and Voyage Information</p>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">Vessel Name</label>
@@ -1372,52 +1420,6 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               <p className="text-xs text-gray-500 text-center py-2">No vessel/voyage added yet</p>
             )}
 
-            {/* Add Button */}
-            <Button 
-              type="button" 
-              size="sm" 
-              className="w-full mb-3 bg-red-500 text-white" 
-              onClick={addContainer}
-              icon={<Plus className="h-3 w-3" />}
-            >
-              Add Container/Seal/BL
-            </Button>
-
-            {/* List of Containers */}
-            {containerNumbers.length > 0 && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
-                <p className="text-xs text-gray-600 font-medium mb-2">Added Containers ({containerNumbers.length}):</p>
-                {containerNumbers.map((container, index) => (
-                  <div key={index} className="flex items-center justify-between bg-white p-2 rounded border border-blue-200">
-                    <div className="flex-1">
-                      <p className="text-xs text-red-600 font-medium">#{index + 1}</p>
-                      <p className="text-xs text-gray-700 mt-1">
-                        <span className="font-medium">Container:</span> {container.containerNumber}
-                      </p>
-                      <p className="text-xs text-gray-700">
-                        <span className="font-medium">Seal:</span> {container.sealNumber}
-                      </p>
-                      {container.blNumber && (
-                        <p className="text-xs text-gray-700">
-                          <span className="font-medium">BL:</span> {container.blNumber}
-                        </p>
-                      )}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeContainer(index)}
-                      className="p-1 hover:bg-red-100 rounded transition-colors text-red-600 flex-shrink-0"
-                      title="Remove"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            {containerNumbers.length === 0 && (
-              <p className="text-xs text-gray-500 text-center py-2">No containers added yet</p>
-            )}
 
             <div className="mt-3 flex justify-end gap-2">
               <Button

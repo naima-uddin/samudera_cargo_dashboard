@@ -134,7 +134,7 @@ const formatDateTime = (date) => {
 // Stat Card Component
 const StatCard = ({ title, value, icon: Icon, color = 'orange', subtitle }) => {
   const colorClasses = {
-    orange: 'bg-orange-50 text-orange-600',
+    orange: 'bg-orange-50 text-red-600',
     blue: 'bg-blue-50 text-blue-600',
     green: 'bg-green-50 text-green-600',
     yellow: 'bg-yellow-50 text-yellow-600',
@@ -368,15 +368,15 @@ const GroupCard = ({ group, onSelectShipments, onRemoveShipment }) => {
                 className="p-1 hover:bg-orange-200 rounded-lg transition-colors"
               >
                 {expanded ? 
-                  <ChevronUp className="h-5 w-5 text-orange-600" /> : 
-                  <ChevronDown className="h-5 w-5 text-orange-600" />
+                  <ChevronUp className="h-5 w-5 text-red-600" /> : 
+                  <ChevronDown className="h-5 w-5 text-red-600" />
                 }
               </button>
               
               <div className="flex-1">
                 {/* Group Title */}
                 <div className="flex items-center flex-wrap gap-2">
-                  <Globe className="h-5 w-5 text-orange-600" />
+                  <Globe className="h-5 w-5 text-red-600" />
                   <h2 className="text-lg font-semibold text-gray-900">
                     {group.displayName || `${group.origin || 'Unknown'} → ${group.destination || 'Unknown'}`}
                   </h2>

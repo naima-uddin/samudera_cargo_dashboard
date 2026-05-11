@@ -402,7 +402,7 @@ const handleSave = async (shipment) => {
             title="Without Tracking"
             value={stats.withoutTracking}
             icon={AlertCircle}
-            color="bg-orange-50 text-orange-600"
+            color="bg-orange-50 text-red-600"
             onClick={() => filterByTracking('without')}
             active={activeFilter === 'without'}
           />

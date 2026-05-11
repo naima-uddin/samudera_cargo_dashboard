@@ -91,7 +91,7 @@ const StatCard = ({ title, value, icon: Icon, color = 'blue', trend, trendValue,
     green: 'bg-green-50 text-green-600',
     yellow: 'bg-yellow-50 text-yellow-600',
     purple: 'bg-purple-50 text-purple-600',
-    orange: 'bg-orange-50 text-orange-600'
+    orange: 'bg-orange-50 text-red-600'
   };
 
   return (
@@ -1121,7 +1121,7 @@ export default function DamageReportsPage() {
                 </button>
                 <button
                   onClick={() => setShowBulk(true)}
-                  className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700"
+                  className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-orange-700"
                 >
                   Bulk Update
                 </button>

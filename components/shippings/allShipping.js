@@ -402,7 +402,7 @@ const TRACKING_STATUS_CONFIG = {
   },
   out_for_delivery: {
     label: 'Out for Delivery',
-    color: 'bg-orange-100 text-orange-600',
+    color: 'bg-orange-100 text-red-600',
     icon: Navigation
   },
   delivered: {
@@ -495,7 +495,7 @@ const Button = ({
   const baseClasses = 'rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center justify-center';
   
   const variants = {
-    primary: 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-orange-500 shadow-sm',
+    primary: 'bg-orange-500 text-white hover:bg-red-600 focus:ring-orange-500 shadow-sm',
     secondary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-600',
     outline: 'border-2 border-orange-500 text-orange-500 hover:bg-orange-50 focus:ring-orange-500',
     light: 'bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500',
@@ -1114,7 +1114,7 @@ const ReturnRequestsModal = ({ isOpen, onClose, onRefresh }) => {
                           <p className="text-sm">{getReturnReasonText(req.reason)}</p>
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`text-sm font-medium ${isFree ? 'text-green-600' : 'text-orange-600'}`}>
+                          <span className={`text-sm font-medium ${isFree ? 'text-green-600' : 'text-red-600'}`}>
                             {isFree ? 'FREE' : `$${req.returnCost || 0} ${req.returnCostCurrency || 'USD'}`}
                           </span>
                         </td>
@@ -1246,7 +1246,7 @@ const ReturnRequestReviewModal = ({ isOpen, onClose, returnRequest, onApprove, o
             <div><p className="text-xs text-gray-500">Customer</p><p className="text-sm font-medium">{returnRequest.customerName || 'N/A'}</p></div>
             <div><p className="text-xs text-gray-500">Reason</p><p className="text-sm">{getReturnReasonText(returnRequest.reason)}</p></div>
             <div><p className="text-xs text-gray-500">Description</p><p className="text-sm text-gray-600">{returnRequest.description}</p></div>
-            <div><p className="text-xs text-gray-500">Return Cost</p><p className={`text-sm font-semibold ${isFree ? 'text-green-600' : 'text-orange-600'}`}>{isFree ? 'FREE' : `$${returnRequest.returnCost || 0} ${returnRequest.returnCostCurrency || 'USD'}`}</p></div>
+            <div><p className="text-xs text-gray-500">Return Cost</p><p className={`text-sm font-semibold ${isFree ? 'text-green-600' : 'text-red-600'}`}>{isFree ? 'FREE' : `$${returnRequest.returnCost || 0} ${returnRequest.returnCostCurrency || 'USD'}`}</p></div>
           </div>
         </div>
 

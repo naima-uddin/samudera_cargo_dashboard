@@ -2429,7 +2429,7 @@ const handleSavePriceQuote = async (bookingId, quoteData) => {
     { key: 'price_quoted', label: 'Price Quoted', count: stats.price_quoted, icon: Tag, color: 'bg-yellow-100 text-yellow-600' },
     { key: 'booking_confirmed', label: 'Confirmed', count: stats.booking_confirmed, icon: CheckCircle, color: 'bg-indigo-100 text-indigo-600' },
     // { key: 'pending', label: 'Pending', count: stats.pending, icon: Clock, color: 'bg-gray-100 text-gray-600' },
-    // { key: 'received_at_warehouse', label: 'At Warehouse', count: stats.received_at_warehouse, icon: Package, color: 'bg-orange-100 text-orange-600' },
+    // { key: 'received_at_warehouse', label: 'At Warehouse', count: stats.received_at_warehouse, icon: Package, color: 'bg-orange-100 text-red-600' },
     // { key: 'consolidation_in_progress', label: 'Consolidation', count: stats.consolidation_in_progress, icon: Box, color: 'bg-amber-100 text-amber-600' },
     // { key: 'loaded_in_container', label: 'Loaded', count: stats.loaded_in_container, icon: Ship, color: 'bg-emerald-100 text-emerald-600' },
     // { key: 'in_transit', label: 'In Transit', count: stats.in_transit, icon: Truck, color: 'bg-cyan-100 text-cyan-600' },

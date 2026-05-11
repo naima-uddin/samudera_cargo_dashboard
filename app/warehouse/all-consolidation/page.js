@@ -799,7 +799,7 @@ const handleResume = async () => {
             'bg-purple-100'
           }`}>
             <StatusIcon className={`h-3 w-3 ${
-              displayStatus === 'on_hold' ? 'text-orange-600' :
+              displayStatus === 'on_hold' ? 'text-red-600' :
               displayStatus === 'cancelled' ? 'text-red-600' :
               displayStatus === 'delivered' ? 'text-green-600' :
               displayStatus === 'departed_port_of_origin' || displayStatus === 'in_transit_sea_freight' ? 'text-blue-600' :
@@ -1016,7 +1016,7 @@ const handleResume = async () => {
 
 const StatCard = ({ title, value, icon: Icon, color = 'orange', subtitle }) => {
   const colorClasses = {
-    orange: 'bg-orange-50 text-orange-600 border-orange-200',
+    orange: 'bg-orange-50 text-red-600 border-orange-200',
     blue: 'bg-blue-50 text-blue-600 border-blue-200',
     green: 'bg-green-50 text-green-600 border-green-200',
     purple: 'bg-purple-50 text-purple-600 border-purple-200'
@@ -1306,7 +1306,7 @@ const ConsolidationCard = ({
         return (
           <button
             onClick={() => onUnderCustomsCleared(consolidation)}
-            className="px-2 py-1 bg-orange-600 text-white rounded text-xs hover:bg-orange-700 flex items-center whitespace-nowrap"
+            className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-orange-700 flex items-center whitespace-nowrap"
           >
             <Shield className="h-3 w-3 mr-1" />
             Under Customs Clearance
@@ -1377,7 +1377,7 @@ const ConsolidationCard = ({
   return (
     <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200 self-start h-fit ring-1 ring-black/5">
   {/* Header - Gradient with better contrast */}
-  <div className="p-4 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 text-gray-800">
+  <div className="p-4 bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-gray-800">
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-2">
         <div className="p-1 bg-white/20 rounded-lg">
@@ -1520,7 +1520,7 @@ const ConsolidationCard = ({
               style={{ width: `${((currentStepIndex + 1) / statusSteps.length) * 100}%` }}
             />
           </div>
-          <span className="text-[9px] font-medium text-orange-600">
+          <span className="text-[9px] font-medium text-red-600">
             {Math.round(((currentStepIndex + 1) / statusSteps.length) * 100)}%
           </span>
         </div>
@@ -1537,9 +1537,9 @@ const ConsolidationCard = ({
         </div>
       )}
       {isJourneyExpanded ? (
-        <ChevronUp className="h-4 w-4 text-orange-600" />
+        <ChevronUp className="h-4 w-4 text-red-600" />
       ) : (
-        <ChevronDown className="h-4 w-4 text-orange-600" />
+        <ChevronDown className="h-4 w-4 text-red-600" />
       )}
     </div>
   </button>
@@ -1576,7 +1576,7 @@ const ConsolidationCard = ({
               {(() => {
                 const currentStep = statusSteps[currentStepIndex];
                 const Icon = currentStep?.icon || Package;
-                return <Icon className="h-3.5 w-3.5 text-orange-600" />;
+                return <Icon className="h-3.5 w-3.5 text-red-600" />;
               })()}
             </div>
             <div>
@@ -1588,7 +1588,7 @@ const ConsolidationCard = ({
           </div>
           <div className="text-right">
             <p className="text-[9px] text-gray-400">Completion</p>
-            <p className="text-lg font-bold text-orange-600">
+            <p className="text-lg font-bold text-red-600">
               {Math.round(((currentStepIndex + 1) / statusSteps.length) * 100)}%
             </p>
           </div>
@@ -1945,7 +1945,7 @@ const ConsolidationDetailsModal = ({
               onReadyForDispatch(consolidation);
               onClose();
             }}
-            className="px-4 py-1.5 bg-orange-600 text-white rounded-lg text-sm hover:bg-orange-700 flex items-center"
+            className="px-4 py-1.5 bg-red-600 text-white rounded-lg text-sm hover:bg-orange-700 flex items-center"
           >
             <Send className="h-3 w-3 mr-1" />
             Ready
@@ -2165,7 +2165,7 @@ const ConsolidationDetailsModal = ({
               {statusSteps.length > 0 && currentStepIndex >= 0 && (
                 <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-3 rounded-lg">
                   <h4 className="text-xs font-semibold mb-2 flex items-center">
-                    <TrendingUp className="h-3 w-3 mr-1 text-orange-600" />
+                    <TrendingUp className="h-3 w-3 mr-1 text-red-600" />
                     Journey Progress
                   </h4>
                   
@@ -2184,7 +2184,7 @@ const ConsolidationDetailsModal = ({
                         <div className="p-1 bg-orange-100 rounded-full">
                           {(() => {
                             const StepIcon = statusSteps[currentStepIndex]?.icon || Package;
-                            return <StepIcon className="h-3 w-3 text-orange-600" />;
+                            return <StepIcon className="h-3 w-3 text-red-600" />;
                           })()}
                         </div>
                         <div>
@@ -2196,7 +2196,7 @@ const ConsolidationDetailsModal = ({
                       </div>
                       <div className="text-right">
                         <p className="text-[9px] text-gray-400">Step</p>
-                        <p className="text-xs font-bold text-orange-600">
+                        <p className="text-xs font-bold text-red-600">
                           {currentStepIndex + 1}/{statusSteps.length}
                         </p>
                       </div>
@@ -2230,7 +2230,7 @@ const ConsolidationDetailsModal = ({
                           
                           <div className="flex-1">
                             <p className={`text-xs font-medium ${
-                              isCurrent ? 'text-orange-600' : isCompleted ? 'text-gray-900' : 'text-gray-400'
+                              isCurrent ? 'text-red-600' : isCompleted ? 'text-gray-900' : 'text-gray-400'
                             }`}>
                               {step.label}
                             </p>
@@ -2556,7 +2556,7 @@ const TableRow = ({
 
     if (consolidation.status === 'consolidated') {
       buttons.push(
-        <button key="ready" onClick={() => onReadyForDispatch(consolidation)} className="p-1 hover:bg-orange-100 rounded text-orange-600" title="Ready">
+        <button key="ready" onClick={() => onReadyForDispatch(consolidation)} className="p-1 hover:bg-orange-100 rounded text-red-600" title="Ready">
           <Send className="h-3 w-3" />
         </button>
       );
@@ -3123,7 +3123,7 @@ const BulkActionsBar = ({ selectedCount, onClear, onBulkAction }) => {
     <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex items-center space-x-2 z-50 text-xs">
       <span className="font-medium px-2">{selectedCount} selected</span>
       <div className="h-3 w-px bg-gray-200" />
-      <button onClick={() => onBulkAction('ready')} className="px-2 py-1 bg-orange-50 text-orange-600 rounded hover:bg-orange-100">
+      <button onClick={() => onBulkAction('ready')} className="px-2 py-1 bg-orange-50 text-red-600 rounded hover:bg-orange-100">
         Ready
       </button>
       <button onClick={() => onBulkAction('dispatch')} className="px-2 py-1 bg-green-50 text-green-600 rounded hover:bg-green-100">
@@ -4073,7 +4073,7 @@ const ReadyForDispatchModal = ({ isOpen, onClose, consolidation, onSuccess }) =>
       <div className="bg-white rounded-xl max-w-md w-full">
         <div className="p-4 border-b">
           <h3 className="text-base font-bold flex items-center">
-            <Send className="h-4 w-4 mr-2 text-orange-600" />
+            <Send className="h-4 w-4 mr-2 text-red-600" />
             Loaded into Container
           </h3>
           <p className="text-xs text-gray-500 mt-1">
@@ -4091,7 +4091,7 @@ const ReadyForDispatchModal = ({ isOpen, onClose, consolidation, onSuccess }) =>
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
               placeholder="Any notes about this dispatch..."
-              className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-orange-600"
+              className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-red-600"
             />
           </div>
 
@@ -4112,7 +4112,7 @@ const ReadyForDispatchModal = ({ isOpen, onClose, consolidation, onSuccess }) =>
           <button
             onClick={handleMarkAsReady}
             disabled={loading}
-            className="px-3 py-1.5 text-sm bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:bg-gray-300 flex items-center"
+            className="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-orange-700 disabled:bg-gray-300 flex items-center"
           >
             {loading ? (
               <>

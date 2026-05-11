@@ -332,7 +332,7 @@ const getInvoiceTrackingNumber = (invoice) => {
 // Stat Card Component
 const StatCard = ({ title, value, icon: Icon, color = 'orange', subtitle }) => {
   const colorClasses = {
-    orange: 'bg-orange-50 text-orange-600',
+    orange: 'bg-orange-50 text-red-600',
     blue: 'bg-blue-50 text-blue-600',
     green: 'bg-green-50 text-green-600',
     yellow: 'bg-yellow-50 text-yellow-600',

@@ -318,7 +318,7 @@ const handleReset = () => {
                 <div className={`bg-white rounded-2xl shadow-lg overflow-hidden ${
                   userType === 'staff' ? 'border-4 border-orange-500' : 'border-2 border-transparent'
                 }`}>
-                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6">
+                  <div className="bg-gradient-to-r from-orange-500 to-red-600 p-6">
                     <div className="flex justify-center">
                       <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-xl">
                         <FaUserPlus className="text-5xl text-orange-500" />
@@ -650,7 +650,7 @@ const handleReset = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
-                      <BsPersonBadge className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-orange-600'}`} />
+                      <BsPersonBadge className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Full Name</p>
@@ -660,7 +660,7 @@ const handleReset = () => {
 
                   <div className="flex items-start gap-3">
                     <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
-                      <MdEmail className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-orange-600'}`} />
+                      <MdEmail className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Email</p>
@@ -670,7 +670,7 @@ const handleReset = () => {
 
                   <div className="flex items-start gap-3">
                     <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
-                      <MdPhone className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-orange-600'}`} />
+                      <MdPhone className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Phone</p>
@@ -682,7 +682,7 @@ const handleReset = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
-                      <FaBriefcase className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-orange-600'}`} />
+                      <FaBriefcase className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Role</p>
@@ -693,7 +693,7 @@ const handleReset = () => {
                   {(userType === 'admin' || formData.department) && (
                     <div className="flex items-start gap-3">
                       <div className={`p-2 rounded-lg ${userType === 'admin' ? 'bg-blue-100' : 'bg-orange-100'}`}>
-                        <FaBuilding className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-orange-600'}`} />
+                        <FaBuilding className={`text-xl ${userType === 'admin' ? 'text-blue-600' : 'text-red-600'}`} />
                       </div>
                       <div>
                         <p className="text-sm text-gray-500">Department</p>
@@ -829,7 +829,7 @@ const handleReset = () => {
                     className={`flex items-center gap-2 px-8 py-3 rounded-lg font-medium text-white transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${
                       userType === 'admin'
                         ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-blue-200'
-                        : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:shadow-orange-200'
+                        : 'bg-gradient-to-r from-orange-500 to-red-600 hover:shadow-orange-200'
                     }`}
                   >
                     {loading ? (
@@ -851,7 +851,7 @@ const handleReset = () => {
                     className={`flex items-center gap-2 px-8 py-3 rounded-lg font-medium text-white transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
                       userType === 'admin'
                         ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-blue-200'
-                        : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:shadow-orange-200'
+                        : 'bg-gradient-to-r from-orange-500 to-red-600 hover:shadow-orange-200'
                     }`}
                   >
                     Next

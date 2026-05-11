@@ -700,7 +700,7 @@ const UpdateStatusModal = ({
             <p className="text-xs text-gray-500 mb-1">Current Status</p>
             <StatusBadge status={normalizedCurrentStatus} />
             {normalizedCurrentStatus === 'on_hold' && (
-              <p className="text-xs text-orange-600 mt-2">
+              <p className="text-xs text-red-600 mt-2">
                 ⚠️ Shipment is on hold. You can resume or cancel.
               </p>
             )}
@@ -916,7 +916,7 @@ const UpdateStatusModal = ({
               {getShipmentStatusDisplayText(normalizedCurrentStatus)}
             </p>
             <p className="text-sm text-gray-600">→</p>
-            <p className="text-lg font-semibold text-orange-600 my-1">
+            <p className="text-lg font-semibold text-red-600 my-1">
               {selectedStatus === 'on_hold' 
                 ? 'On Hold (Paused)' 
                 : normalizedCurrentStatus === 'on_hold' && selectedStatus !== 'cancelled'
@@ -955,7 +955,14 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [containerNumbers, setContainerNumbers] = useState(shipment?.containers || []);
   const [newContainer, setNewContainer] = useState({ containerNumber: "", sealNumber: "", blNumber: "" });
-  const [transportDetails, setTransportDetails] = useState({ vesselName: '', voyageNumber: '' });
+  const [transportEntries, setTransportEntries] = useState(
+    Array.isArray(shipment?.transportLegs) && shipment.transportLegs.length > 0
+      ? shipment.transportLegs
+      : (shipment?.transport?.vesselName || shipment?.transport?.voyageNumber
+        ? [{ vesselName: shipment.transport.vesselName || '', voyageNumber: shipment.transport.voyageNumber || '' }]
+        : [])
+  );
+  const [newTransport, setNewTransport] = useState({ vesselName: '', voyageNumber: '' });
   const [isSavingContainers, setIsSavingContainers] = useState(false);
   const [editingSender, setEditingSender] = useState(false);
   const [editingReceiver, setEditingReceiver] = useState(false);
@@ -969,10 +976,14 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
       setContainerNumbers(shipment?.containers || []);
       setSenderData(shipment?.sender || {});
       setReceiverData(shipment?.receiver || {});
-      setTransportDetails({
-        vesselName: shipment?.transport?.vesselName || '',
-        voyageNumber: shipment?.transport?.voyageNumber || ''
-      });
+      setTransportEntries(
+        Array.isArray(shipment?.transportLegs) && shipment.transportLegs.length > 0
+          ? shipment.transportLegs
+          : (shipment?.transport?.vesselName || shipment?.transport?.voyageNumber
+            ? [{ vesselName: shipment.transport.vesselName || '', voyageNumber: shipment.transport.voyageNumber || '' }]
+            : [])
+      );
+      setNewTransport({ vesselName: '', voyageNumber: '' });
       setEditingSender(false);
       setEditingReceiver(false);
     }
@@ -1009,14 +1020,51 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
     toast.success("Container removed");
   };
 
+  const addTransport = () => {
+    if (!newTransport.vesselName && !newTransport.voyageNumber) {
+      toast.warning("Please provide vessel name or voyage number");
+      return;
+    }
+
+    setTransportEntries([...transportEntries, { ...newTransport }]);
+    setNewTransport({ vesselName: '', voyageNumber: '' });
+    toast.success("Vessel/Voyage added");
+  };
+
+  const removeTransport = (index) => {
+    setTransportEntries(transportEntries.filter((_, i) => i !== index));
+    toast.success("Vessel/Voyage removed");
+  };
+
+  const resetShipmentDetails = () => {
+    setContainerNumbers(shipment?.containers || []);
+    setTransportEntries(
+      Array.isArray(shipment?.transportLegs) && shipment.transportLegs.length > 0
+        ? shipment.transportLegs
+        : (shipment?.transport?.vesselName || shipment?.transport?.voyageNumber
+          ? [{ vesselName: shipment.transport.vesselName || '', voyageNumber: shipment.transport.voyageNumber || '' }]
+          : [])
+    );
+    setNewContainer({ containerNumber: "", sealNumber: "", blNumber: "" });
+    setNewTransport({ vesselName: '', voyageNumber: '' });
+  };
+
   const saveContainers = async () => {
     setIsSavingContainers(true);
     try {
+      const normalizedTransports = transportEntries
+        .map((entry) => ({
+          vesselName: entry?.vesselName || '',
+          voyageNumber: entry?.voyageNumber || ''
+        }))
+        .filter((entry) => entry.vesselName || entry.voyageNumber);
+
       const response = await updateShipmentStatus(shipment._id, {
         status: currentShipmentStatus,
-        notes: 'Updated shipment containers',
+        notes: 'Updated shipment containers and transport details',
         containers: containerNumbers,
-        transport: transportDetails
+        transports: normalizedTransports,
+        transport: normalizedTransports[normalizedTransports.length - 1] || { vesselName: '', voyageNumber: '' }
       });
 
       if (response.success) {
@@ -1114,8 +1162,8 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
         <p className="text-xs font-medium text-blue-700 mb-1">📦 Containers</p>
         {containerItems.map((container, idx) => (
           <p key={idx} className="text-xs text-blue-600">
-            <span className="text-orange-600">Container:</span> {container?.containerNumber || 'N/A'}{' '}
-            <span className="text-orange-600">Seal:</span> {container?.sealNumber || 'N/A'}
+            <span className="text-red-600">Container:</span> {container?.containerNumber || 'N/A'}{' '}
+            <span className="text-red-600">Seal:</span> {container?.sealNumber || 'N/A'}
           </p>
         ))}
       </div>
@@ -1202,7 +1250,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
     })()}
   </div>
   {(currentShipmentStatus === 'on_hold' || currentShipmentStatus === 'cancelled') && (
-    <p className="mt-2 text-xs text-orange-600">
+    <p className="mt-2 text-xs text-red-600">
       {currentShipmentStatus === 'on_hold'
         ? 'Shipment is on hold. The timeline above stops at the last active shipment step.'
         : 'Shipment is cancelled. The timeline above stops at the last active shipment step.'}
@@ -1266,8 +1314,8 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 <input
                   type="text"
                   placeholder="Enter vessel name"
-                  value={transportDetails.vesselName}
-                  onChange={(e) => setTransportDetails({ ...transportDetails, vesselName: e.target.value })}
+                  value={newTransport.vesselName}
+                  onChange={(e) => setNewTransport({ ...newTransport, vesselName: e.target.value })}
                   className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
@@ -1276,12 +1324,53 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 <input
                   type="text"
                   placeholder="Enter voyage number"
-                  value={transportDetails.voyageNumber}
-                  onChange={(e) => setTransportDetails({ ...transportDetails, voyageNumber: e.target.value })}
+                  value={newTransport.voyageNumber}
+                  onChange={(e) => setNewTransport({ ...newTransport, voyageNumber: e.target.value })}
                   className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
             </div>
+
+            <Button
+              type="button"
+              variant="light"
+              size="sm"
+              className="w-full mb-3"
+              onClick={addTransport}
+              icon={<Plus className="h-3 w-3" />}
+            >
+              Add Vessel/Voyage
+            </Button>
+
+            {transportEntries.length > 0 && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-2 mb-3">
+                <p className="text-xs text-gray-600 font-medium mb-2">Added Vessel/Voyage ({transportEntries.length}):</p>
+                {transportEntries.map((entry, index) => (
+                  <div key={index} className="flex items-center justify-between bg-white p-2 rounded border border-amber-200">
+                    <div className="flex-1">
+                      <p className="text-xs text-orange-600 font-medium">#{index + 1}</p>
+                      <p className="text-xs text-gray-700 mt-1">
+                        <span className="font-medium">Vessel:</span> {entry.vesselName || 'N/A'}
+                      </p>
+                      <p className="text-xs text-gray-700">
+                        <span className="font-medium">Voyage:</span> {entry.voyageNumber || 'N/A'}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeTransport(index)}
+                      className="p-1 hover:bg-red-100 rounded transition-colors text-red-600 flex-shrink-0"
+                      title="Remove"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {transportEntries.length === 0 && (
+              <p className="text-xs text-gray-500 text-center py-2">No vessel/voyage added yet</p>
+            )}
 
             {/* Add Button */}
             <Button 
@@ -1292,7 +1381,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
               onClick={addContainer}
               icon={<Plus className="h-3 w-3" />}
             >
-              Add
+              Add Container/Seal/BL
             </Button>
 
             {/* List of Containers */}
@@ -1302,7 +1391,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 {containerNumbers.map((container, index) => (
                   <div key={index} className="flex items-center justify-between bg-white p-2 rounded border border-blue-200">
                     <div className="flex-1">
-                      <p className="text-xs text-orange-600 font-medium">#{index + 1}</p>
+                      <p className="text-xs text-red-600 font-medium">#{index + 1}</p>
                       <p className="text-xs text-gray-700 mt-1">
                         <span className="font-medium">Container:</span> {container.containerNumber}
                       </p>
@@ -1336,7 +1425,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 type="button"
                 variant="light"
                 size="sm"
-                onClick={() => setContainerNumbers(shipment?.containers || [])}
+                onClick={resetShipmentDetails}
                 disabled={isSavingContainers}
               >
                 Reset
@@ -1348,7 +1437,7 @@ const ShipmentDetailsModal = ({ isOpen, onClose, shipment, onStatusUpdated }) =>
                 onClick={saveContainers}
                 isLoading={isSavingContainers}
               >
-                Save Containers
+                Save Shipment Details
               </Button>
             </div>
           </div>

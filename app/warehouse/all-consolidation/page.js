@@ -136,7 +136,7 @@ const CONSOLIDATION_TIMELINE_STATUS_ALIASES = {
   loaded_into_container: 'loaded_into_container',
   loaded_in_container: 'loaded_into_container',
   ready_for_dispatch: 'loaded_into_container',
-  loaded: 'container_sealed',
+  loaded: 'loaded_into_container',
   sealed: 'container_sealed',
   container_sealed: 'container_sealed',
   container_loaded: 'loaded_into_container',

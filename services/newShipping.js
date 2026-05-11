@@ -115,7 +115,7 @@ import axios from 'axios';
 import { getAuthToken } from '@/utils/SessionHelper';
 
 // ✅ API_URL ডিফাইন করুন
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.samuderathai.com/api/v1';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://samudera-cargo-server.vercel.app/api/v1';
 
 export const updateNewTrackingNumber = async (shipmentId, trackingNumber) => {
   try {

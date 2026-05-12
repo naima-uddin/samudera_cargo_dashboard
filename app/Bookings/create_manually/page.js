@@ -431,7 +431,7 @@ export default function CreateBooking() {
       deliveryInstructions: '',
       isResidential: false
     },
-    courier: { company: 'Samudera Traffic Co., Ltd.s Group', serviceType: 'standard' },
+    courier: { company: 'Samudera Traffic Co., Ltd. Group', serviceType: 'standard' },
     trackingNumber: '',
     status: 'booking_requested',
     pricingStatus: 'quoted',

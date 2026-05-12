@@ -551,7 +551,7 @@ const DashboardSummary = () => {
           <Card sx={{ p: { xs: 2.5, md: 3 }, minHeight: 160, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%', maxWidth: '100%' }}>
             <Box>
               <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-                Samudera Traffic Co., Ltd.s Dashboard
+                Samudera Traffic Co., Ltd. Dashboard
               </Typography>
               <Typography variant="body1" sx={{ opacity: 0.88, mb: 3, maxWidth: { xs: '100%', md: '85%' } }}>
                 Welcome back, {user?.firstName || user?.name || 'User'}! Track the latest bookings, shipments, invoices, and warehouse activity all in one place.

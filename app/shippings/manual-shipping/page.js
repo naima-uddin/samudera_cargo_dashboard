@@ -927,7 +927,7 @@ const UpdateStatusModal = ({
           
           {/* Display Update Date & Time */}
           <div className="bg-blue-50 p-3 rounded-lg text-left">
-            <p className="text-xs text-gray-500 mb-2">Update: {updateDate} at {updateTime}</p>
+            <p className="text-xs text-gray-500 mb-2">Update: {updateDate} </p>
           </div>
 
           {remarks && (

@@ -3,6 +3,7 @@ import Topbar from "@/components/common/topbar";
 import Sidebar from "@/components/common/sidebar";
 import "./globals.css";
 import ToastProvider from "@/components/common/ToastProvider";
+import LayoutClient from "@/components/layout/LayoutClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,13 +24,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} overflow-hidden`}>
-        <div className="flex min-h-screen w-full overflow-hidden">
-          <Sidebar />
-          <main className="relative flex-1 min-w-0 h-screen overflow-y-auto overflow-x-hidden p-3 sm:p-5">
-              {/* <Topbar /> */}
-            {children}
-          </main>
-        </div>
+        <LayoutClient>
+          {children}
+        </LayoutClient>
         <ToastProvider />
       </body>
     </html>

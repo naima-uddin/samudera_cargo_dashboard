@@ -18,8 +18,8 @@ import {
 } from 'react-icons/hi';
 import { MdDashboard, MdWarehouse, MdLocalShipping, MdAttachMoney } from 'react-icons/md';
 import { BsPeople, BsClipboardData } from 'react-icons/bs';
-import Image from 'next/image'; 
 import { logout as authLogout, getAuthToken, getUserDetails } from '@/utils/SessionHelper';
+import { useSiteSettings } from '@/components/context/SiteSettingsProvider';
 
 // Loading Spinner Component
 const LoadingSpinner = () => (
@@ -46,35 +46,39 @@ const MenuSkeleton = () => (
 );
 
 // Logo Component
-const Logo = ({ collapsed }) => (
-  <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-4 py-8`}>
-    <div className="relative">
-      {collapsed ? (
-        <div className="w-8 h-8 relative">
-          <Link href="/dashboard" className="absolute inset-0">
-          <Image 
-            src="/logo.png"
-            alt="LogiSwift" 
-            width={32}
-            height={32}
-            className="object-contain"
-          />
+const Logo = ({ collapsed }) => {
+  const site = useSiteSettings();
+  return (
+    <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-4 py-8`}>
+      <div className="relative">
+        {collapsed ? (
+          <div className="w-8 h-8 relative">
+            <Link href="/dashboard" className="absolute inset-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={site.logo}
+                alt={site.companyName}
+                className="w-8 h-8 object-contain"
+              />
+            </Link>
+          </div>
+        ) : (
+          <Link href="/dashboard" className="flex items-center gap-2 mb-5 max-w-[200px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={site.logo}
+              alt={site.companyName}
+              className="h-9 w-9 object-contain flex-shrink-0"
+            />
+            <span className="text-sm font-bold text-gray-800 leading-tight line-clamp-2">
+              {site.companyName}
+            </span>
           </Link>
-        </div>
-      ) : (
-        <div className="relative h-8 w-24 mb-5">
-          <Image 
-            src="/logo.png"
-            alt="LogiSwift" 
-            width={96}
-            height={32}
-            className="object-contain object-left"
-          />
-        </div>
-      )}
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Menu Items Configuration
 const menuItems = [
@@ -214,6 +218,13 @@ const menuItems = [
         roles: ['admin']
       },
     ],
+  },
+  {
+    title: 'Site Settings',
+    path: '/settings',
+    icon: <HiOutlineCog className="w-5 h-5" />,
+    activeIcon: <HiOutlineCog className="w-5 h-5" />,
+    roles: ['admin']
   },
 ];
 

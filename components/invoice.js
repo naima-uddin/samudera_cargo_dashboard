@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSiteSettings } from '@/components/context/SiteSettingsProvider';
 import { 
   getAllInvoices,
   getInvoiceById,
@@ -241,9 +242,9 @@ const COMPANY_INFO = {
 };
 
 // PDF Download Function
-const generateAndDownloadSinglePDF = async (invoice) => {
+const generateAndDownloadSinglePDF = async (invoice, companyInfo = COMPANY_INFO) => {
   try {
-    const blob = await pdf(<InvoicePDF invoice={invoice} companyInfo={COMPANY_INFO} />).toBlob();
+    const blob = await pdf(<InvoicePDF invoice={invoice} companyInfo={companyInfo} />).toBlob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -760,6 +761,14 @@ const EmptyState = ({ onRefresh }) => (
 
 export default function InvoicesPage() {
   const router = useRouter();
+  const site = useSiteSettings();
+  const companyInfo = {
+    name: site.companyName,
+    address: site.address,
+    city: '',
+    phone: site.phone,
+    email: site.email,
+  };
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -939,7 +948,7 @@ export default function InvoicesPage() {
     try {
       const invoice = allInvoices.find(inv => inv._id === invoiceId);
       if (invoice) {
-        const pdfResult = await generateAndDownloadSinglePDF(invoice);
+        const pdfResult = await generateAndDownloadSinglePDF(invoice, companyInfo);
         toast.dismiss(toastId);
         if (pdfResult.success) {
           toast.success(pdfResult.message);

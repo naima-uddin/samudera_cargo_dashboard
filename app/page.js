@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { login } from '@/services/Authentication';
 import ToastProvider from '@/components/common/ToastProvider';
+import { useSiteSettings } from '@/components/context/SiteSettingsProvider';
 
 const Button = ({
   children,
@@ -114,6 +115,7 @@ const Input = ({
 
 export default function LoginPage() {
   const router = useRouter();
+  const site = useSiteSettings();
 
   useEffect(() => {
     // Hide all header, sidebar, navbar elements
@@ -330,7 +332,7 @@ useEffect(() => {
 
             <div className="relative z-10 h-full flex flex-col justify-center px-12">
               <div className="mb-8 ">
-                <img src="/logo.png" alt="LogiSwift" className="w-24 h-auto text-white" />
+                <img src={site.logo} alt={site.companyName} className="w-24 h-auto text-white" />
               </div>
               
               <h1 className="text-5xl font-bold text-white leading-tight mb-6">
@@ -457,7 +459,7 @@ useEffect(() => {
 
             <div className="relative z-10">
               <div className="flex items-center justify-between">
-                <img src="/logo.png" alt="LogiSwift" className="w-12 h-auto" />
+                <img src={site.logo} alt={site.companyName} className="w-12 h-auto" />
                 <span className="text-slate-900 text-xs font-medium px-2 py-1 bg-slate-100 rounded-full">Logistics Hub</span>
               </div>
               

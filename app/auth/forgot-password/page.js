@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { forgotPassword, verifyResetOTP, resetPassword } from '@/services/Authentication';
+import { useSiteSettings } from '@/components/context/SiteSettingsProvider';
 
 const Button = ({
   children,
@@ -133,6 +134,7 @@ const OtpInput = ({
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
+  const site = useSiteSettings();
 
   useEffect(() => {
     // Hide all header, sidebar, navbar elements
@@ -442,7 +444,7 @@ export default function ForgotPasswordPage() {
 
             <div className="relative z-10">
               <div className="w-20 h-auto mb-6">
-                <img src="/logo.png" alt="LogiSwift Logo" className="w-full h-auto" />
+                <img src={site.logo} alt={site.companyName} className="w-full h-auto" />
               </div>
 
               <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
@@ -814,7 +816,7 @@ export default function ForgotPasswordPage() {
 
             <div className="relative z-10">
               <div className="w-16 h-auto mb-4">
-                <img src="/logo.png" alt="LogiSwift Logo" className="w-full h-auto" />
+                <img src={site.logo} alt={site.companyName} className="w-full h-auto" />
               </div>
 
               <h1 className="text-2xl font-bold text-white">

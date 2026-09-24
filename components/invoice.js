@@ -147,9 +147,9 @@ const getStatusTextPDF = (paymentStatus) => {
 // PDF Component
 const InvoicePDF = ({ invoice, companyInfo }) => {
   const defaultCompany = {
-    name: 'Samudera Cargo',
-    address: '8825 STANFORD BLVD, SUITE 306,',
-    city: 'COLUMBIA, MD 21045,USA',
+    name: 'Samudera Traffic Co., Ltd.',
+    address: 'Green Tower, 9th floor, 3656/27-28 Rama IV Road, Klongton-Klong Toey, Bangkok 10110, Thailand',
+    city: '',
     phone: '+66977830395',
     email: 'info@samuderathai.com'
   };
@@ -234,9 +234,9 @@ const InvoicePDF = ({ invoice, companyInfo }) => {
 };
 
 const COMPANY_INFO = {
-  name: 'Samudera Cargo',
-  address: 'Green Tower, 9th floor, 3656/27-28 Rama IV Road',
-  city: 'Klongton-Klong Toey ,Bangkok 10110, Thailand',
+  name: 'Samudera Traffic Co., Ltd.',
+  address: 'Green Tower, 9th floor, 3656/27-28 Rama IV Road, Klongton-Klong Toey, Bangkok 10110, Thailand',
+  city: '',
   phone: '+66977830395',
   email: 'info@samuderathai.com'
 };

@@ -251,7 +251,14 @@ const MenuItem = ({ item, collapsed, depth = 0, onMenuClick, openMenu, setOpenMe
   const pathname = usePathname();
   const router = useRouter();
   const [isNavigating, setIsNavigating] = useState(false);
-  
+
+  // Navigation finished once the pathname changes → stop the per-item spinner.
+  // (The App Router has no router.events, so nothing else turns this off and
+  // the loader would otherwise spin forever.)
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname]);
+
   const hasChildren = item.children && item.children.length > 0;
   const isOpen = openMenu === item.title;
 

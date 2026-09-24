@@ -24,9 +24,17 @@ export const setAuthToken = (token) => {
 
 export const getAuthToken = () => {
   if (typeof window !== 'undefined') {
-    let token = Cookies.get('authToken');
+    // Cookie is the single source of truth — the Next.js middleware can only
+    // read cookies, so falling back to localStorage here would desync the two
+    // (cookie expired, localStorage still set) and cause a /dashboard <-> /
+    // redirect loop. If the cookie is gone the session is over.
+    const token = Cookies.get('authToken') || Cookies.get('token');
     if (!token) {
-      token = Cookies.get('token') || localStorage.getItem('authToken') || localStorage.getItem('token');
+      // Cookie expired/removed: drop any stale localStorage token so nothing
+      // else treats the user as logged in.
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
+      return null;
     }
     return token;
   }
@@ -113,15 +121,20 @@ export const getUserDetails = () => {
   return null;
 };
 
+// Cookies were set with path:'/', so removal MUST also pass path:'/'.
+// Otherwise js-cookie removes at the current page path only, the cookie
+// survives, and the middleware keeps redirecting to /dashboard forever.
+const removeAllCookies = () => {
+  ['authToken', 'token', 'email', 'otp', 'userDetails', 'user'].forEach((name) => {
+    Cookies.remove(name, { path: '/' });
+    Cookies.remove(name); // also clear any legacy path-less cookie
+  });
+};
+
 // ============ SESSION CLEAR ============
 export const clearAllSessions = () => {
   if (typeof window !== 'undefined') {
-    Cookies.remove('authToken');
-    Cookies.remove('token');
-    Cookies.remove('email');
-    Cookies.remove('otp');
-    Cookies.remove('userDetails');
-    Cookies.remove('user');
+    removeAllCookies();
     localStorage.clear();
     window.location.href = "/";
   }
@@ -130,12 +143,7 @@ export const clearAllSessions = () => {
 // ============ LOGOUT ============
 export const logout = () => {
   if (typeof window !== 'undefined') {
-    Cookies.remove('authToken');
-    Cookies.remove('token');
-    Cookies.remove('email');
-    Cookies.remove('otp');
-    Cookies.remove('userDetails');
-    Cookies.remove('user');
+    removeAllCookies();
     localStorage.clear();
     window.location.href = "/";
   }

@@ -18,8 +18,8 @@ const EMPTY = {
   fax: '',
 };
 
-const MAX_LOGO_BYTES = 2 * 1024 * 1024; // 2MB source image
-const MAX_FAVICON_BYTES = 512 * 1024; // 512KB favicon
+const MAX_LOGO_BYTES = 20 * 1024 * 1024; // 20MB source image
+const MAX_FAVICON_BYTES = 20 * 1024 * 1024; // 20MB favicon
 
 export default function SiteSettingsForm() {
   const router = useRouter();
@@ -61,7 +61,7 @@ export default function SiteSettingsForm() {
       return;
     }
     if (file.size > MAX_LOGO_BYTES) {
-      toast.error('Image is too large. Please use an image under 2MB.');
+      toast.error('Image is too large. Please use an image under 20MB.');
       return;
     }
 
@@ -88,7 +88,7 @@ export default function SiteSettingsForm() {
       return;
     }
     if (file.size > MAX_FAVICON_BYTES) {
-      toast.error('Favicon is too large. Please use an image under 512KB.');
+      toast.error('Favicon is too large. Please use an image under 20MB.');
       return;
     }
 
@@ -180,7 +180,7 @@ export default function SiteSettingsForm() {
                   <HiOutlineTrash className="w-4 h-4" /> Remove logo
                 </button>
               )}
-              <p className="text-xs text-gray-400">PNG/JPG/SVG, under 2MB. Transparent PNG recommended.</p>
+              <p className="text-xs text-gray-400">PNG/JPG/SVG, under 20MB. Transparent PNG recommended.</p>
             </div>
           </div>
         </div>

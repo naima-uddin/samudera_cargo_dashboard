@@ -37,13 +37,14 @@ export function middleware(request) {
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
-  
-  // লগইন করা থাকলে লগইন পেজে যেতে দেবেন না
-  if (isLoggedIn && pathname === '/') {
-    console.log(`✅ Already logged in, redirecting to dashboard`);
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-  
+
+  // NOTE: আগে এখানে "লগইন করা থাকলে / থেকে /dashboard এ পাঠানো" হতো।
+  // কিন্তু middleware শুধু cookie পড়ে আর client-side auth check localStorage/
+  // cookie মিলিয়ে দেখে — দুটো desync হলে (stale cookie) এই redirect আর client-এর
+  // router.push('/') একে অপরের সাথে অনন্ত loop তৈরি করত (/ ⇄ /dashboard)।
+  // logged-in ইউজারকে dashboard এ পাঠানোর কাজটা এখন login page নিজেই client-side এ
+  // করে, তাই এই server-side redirect সরিয়ে দেওয়া হলো — এতে loop অসম্ভব হয়ে যায়।
+
   return NextResponse.next();
 }
 

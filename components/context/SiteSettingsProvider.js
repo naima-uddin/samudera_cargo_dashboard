@@ -44,16 +44,22 @@ export default function SiteSettingsProvider({ children }) {
   }, []);
 
   // Apply favicon to the document head whenever it changes.
+  // IMPORTANT: never removeChild() the icon <link>s Next.js manages (from
+  // app/favicon.ico) — deleting React-owned head nodes corrupts React's DOM
+  // tree and later crashes route transitions with "Cannot read properties of
+  // null (reading 'removeChild')". Instead we own a single tagged <link> and
+  // only ever mutate that one.
   useEffect(() => {
     if (typeof document === 'undefined' || !settings.favicon) return;
     const head = document.head;
-    head
-      .querySelectorAll("link[rel~='icon'], link[rel='shortcut icon'], link[rel='apple-touch-icon']")
-      .forEach((el) => el.parentNode && el.parentNode.removeChild(el));
-    const link = document.createElement('link');
-    link.rel = 'icon';
+    let link = head.querySelector("link[data-site-favicon='true']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      link.setAttribute('data-site-favicon', 'true');
+      head.appendChild(link);
+    }
     link.href = settings.favicon;
-    head.appendChild(link);
   }, [settings.favicon]);
 
   return (

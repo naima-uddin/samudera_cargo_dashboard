@@ -522,28 +522,30 @@ export default function Sidebar({ user: propUser = null }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Check login status with loading
+  // Check login status once on mount. NOTE: dependency MUST stay [] — if this
+  // runs on every pathname change it flips isLoading=true and remounts the whole
+  // sidebar into the skeleton on each navigation, resetting openMenu/isNavigating
+  // and making links feel like they need a second click. User details come from
+  // the cookie, which doesn't change between routes, so one run is enough.
   useEffect(() => {
-    const loadUser = async () => {
+    const loadUser = () => {
       setIsLoading(true);
       try {
         const token = getAuthToken();
         const userData = getUserDetails();
-        
+
         if (token && userData) {
           setUser(userData);
         }
       } catch (error) {
         console.error('Error loading user:', error);
       } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500); // Small delay for smooth loading
+        setIsLoading(false);
       }
     };
-    
+
     loadUser();
-  }, [pathname]);
+  }, []);
 
   // Handle page navigation loading
   useEffect(() => {

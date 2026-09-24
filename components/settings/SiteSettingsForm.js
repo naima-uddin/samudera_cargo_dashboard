@@ -21,6 +21,46 @@ const EMPTY = {
 const MAX_LOGO_BYTES = 20 * 1024 * 1024; // 20MB source image
 const MAX_FAVICON_BYTES = 20 * 1024 * 1024; // 20MB favicon
 
+// The logo/favicon are stored as base64 inside the site-settings document,
+// which is fetched on EVERY page load of both the public site and dashboard.
+// So we downscale the picked image in the browser before saving: the admin can
+// pick a big file, but only a small, fast image ever hits the DB/network.
+// PNG output preserves transparency (important for logos).
+const resizeImageToDataURL = (file, maxDimension) =>
+  new Promise((resolve, reject) => {
+    // SVG is already tiny and vector — keep as-is.
+    if (file.type === 'image/svg+xml') {
+      const r = new FileReader();
+      r.onloadend = () => resolve(r.result);
+      r.onerror = () => reject(new Error('Failed to read image'));
+      r.readAsDataURL(file);
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxDimension || height > maxDimension) {
+        const scale = Math.min(maxDimension / width, maxDimension / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image'));
+    };
+    img.src = url;
+  });
+
 export default function SiteSettingsForm() {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -52,7 +92,7 @@ export default function SiteSettingsForm() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogoSelect = (e) => {
+  const handleLogoSelect = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -65,12 +105,13 @@ export default function SiteSettingsForm() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setForm((prev) => ({ ...prev, logo: reader.result }));
-    };
-    reader.onerror = () => toast.error('Failed to read the image');
-    reader.readAsDataURL(file);
+    try {
+      // Downscale the logo to max 512px so the stored/served image stays small.
+      const dataUrl = await resizeImageToDataURL(file, 512);
+      setForm((prev) => ({ ...prev, logo: dataUrl }));
+    } catch (err) {
+      toast.error('Failed to process the image');
+    }
   };
 
   const removeLogo = () => {
@@ -78,11 +119,12 @@ export default function SiteSettingsForm() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleFaviconSelect = (e) => {
+  const handleFaviconSelect = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const okType = file.type.startsWith('image/') || file.type === 'image/x-icon' || file.name.endsWith('.ico');
+    const isIco = file.type === 'image/x-icon' || file.name.endsWith('.ico');
+    const okType = file.type.startsWith('image/') || isIco;
     if (!okType) {
       toast.error('Please select an image (PNG/ICO/SVG)');
       return;
@@ -92,12 +134,21 @@ export default function SiteSettingsForm() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setForm((prev) => ({ ...prev, favicon: reader.result }));
-    };
-    reader.onerror = () => toast.error('Failed to read the image');
-    reader.readAsDataURL(file);
+    try {
+      if (isIco) {
+        // .ico can't be drawn to canvas reliably — store as-is (already small).
+        const r = new FileReader();
+        r.onloadend = () => setForm((prev) => ({ ...prev, favicon: r.result }));
+        r.onerror = () => toast.error('Failed to read the image');
+        r.readAsDataURL(file);
+      } else {
+        // Downscale favicon to 64px — plenty for a browser tab icon.
+        const dataUrl = await resizeImageToDataURL(file, 64);
+        setForm((prev) => ({ ...prev, favicon: dataUrl }));
+      }
+    } catch (err) {
+      toast.error('Failed to process the image');
+    }
   };
 
   const removeFavicon = () => {
@@ -180,7 +231,7 @@ export default function SiteSettingsForm() {
                   <HiOutlineTrash className="w-4 h-4" /> Remove logo
                 </button>
               )}
-              <p className="text-xs text-gray-400">PNG/JPG/SVG, under 20MB. Transparent PNG recommended.</p>
+              <p className="text-xs text-gray-400">PNG/JPG/SVG, up to 20MB. Auto-optimized for fast loading. Transparent PNG recommended.</p>
             </div>
           </div>
         </div>
@@ -214,7 +265,7 @@ export default function SiteSettingsForm() {
                   <HiOutlineTrash className="w-4 h-4" /> Remove favicon
                 </button>
               )}
-              <p className="text-xs text-gray-400">Square PNG/ICO, ideally 32×32 or 64×64, under 512KB.</p>
+              <p className="text-xs text-gray-400">Square PNG/ICO, ideally 32×32 or 64×64. Auto-optimized on upload.</p>
             </div>
           </div>
         </div>

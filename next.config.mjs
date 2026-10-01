@@ -1,12 +1,17 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  // output: 'export', // Static export mode
+  output: 'export', // Static export mode
   trailingSlash: true,
   
   // Image Optimization - DISABLED for production
   images: {
     unoptimized: true, // Required for middleware compatibility
+    // Backend-served images (public/uploads).
+    remotePatterns: [
+      { protocol: 'https', hostname: 'samudera-cargo-server.vercel.app' },
+      { protocol: 'https', hostname: 'api.samuderathai.com' },
+    ],
     formats: ['image/avif', 'image/webp'], // Modern formats
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

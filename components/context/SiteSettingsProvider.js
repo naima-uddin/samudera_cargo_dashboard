@@ -13,7 +13,7 @@ const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : use
 
 // Fallback defaults so the dashboard never renders empty identity/contact info.
 export const DEFAULT_SETTINGS = {
-  logo: '/logo.png',
+  logo: 'https://samudera-cargo-server.vercel.app/uploads/logo.png',
   favicon: '',
   companyName: 'Samudera Traffic Co., Ltd.',
   phone: '+66977830395',

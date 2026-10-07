@@ -146,6 +146,7 @@ export default function AllTrackingPage() {
 
   // Fetch all shipments from BOTH APIs (New + Old)
   const fetchShipments = async (showLoading = true) => {
+    const previousScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
     if (showLoading) setLoading(true);
     try {
       // Fetch NEW shipments
@@ -221,6 +222,11 @@ export default function AllTrackingPage() {
       toast.error('Failed to fetch shipments');
     } finally {
       if (showLoading) setLoading(false);
+      if (typeof window !== 'undefined' && previousScrollY > 0) {
+        window.requestAnimationFrame(() => {
+          window.scrollTo({ top: previousScrollY, behavior: 'instant' });
+        });
+      }
     }
   };
 

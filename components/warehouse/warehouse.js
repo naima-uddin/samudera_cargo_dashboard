@@ -2073,6 +2073,32 @@ const handleInspectClick = (receipt) => {
                         <p className="text-xs text-gray-500 mt-1">
                           {group.mainType || 'Mixed'} / {group.subType || 'General'}
                         </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {shipments.length > 0 ? shipments.map((item, index) => {
+                            const shipment = item.shipmentId || {};
+                            const trackingNumber = item.trackingNumber || shipment.trackingNumber;
+                            const shipmentNumber = item.shipmentNumber || shipment.shipmentNumber;
+                            const customerName = item.customerName ||
+                              shipment.customerInfo?.name ||
+                              shipment.customerId?.companyName ||
+                              [shipment.customerId?.firstName, shipment.customerId?.lastName].filter(Boolean).join(' ') ||
+                              'Customer';
+
+                            return (
+                              <span
+                                key={item._id || shipment._id || `${group.groupKey}-${index}`}
+                                className="inline-flex items-center gap-1 rounded-md border border-orange-200 bg-orange-50 px-2 py-1 text-xs text-orange-900"
+                                title={`${customerName}${shipmentNumber ? ` • ${shipmentNumber}` : ''}`}
+                              >
+                                <Hash className="h-3 w-3" />
+                                <span className="font-semibold">{trackingNumber || shipmentNumber || 'No tracking number'}</span>
+                                {trackingNumber && shipmentNumber ? <span className="text-orange-700">({shipmentNumber})</span> : null}
+                              </span>
+                            );
+                          }) : (
+                            <span className="text-xs text-gray-500">Shipment identity unavailable</span>
+                          )}
+                        </div>
                       </div>
                       <button
                         onClick={() => handleOpenPendingModal(group)}

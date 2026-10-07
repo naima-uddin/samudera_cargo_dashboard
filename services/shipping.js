@@ -269,7 +269,7 @@ export const getMyShipmentById = async (shipmentId) => {
 // 4. GET MY SHIPMENT TIMELINE (Customer)
 export const getMyShipmentTimeline = async (shipmentId) => {
   try {
-    const response = await axiosInstance.get(`/shipments/my-shipments/${shipmentId}/timeline`);
+    const response = await axiosInstance.get(`/my-shipments/${shipmentId}/timeline`);
     
     if (response.data.success) {
       return {
@@ -481,7 +481,7 @@ export const addTrackingUpdate = async (shipmentId, trackingData) => {
 // 12. GET SHIPMENT TIMELINE
 export const getShipmentTimeline = async (shipmentId) => {
   try {
-    const response = await axiosInstance.get(`/shipments/${shipmentId}/timeline`);
+    const response = await axiosInstance.get(`/my-shipment-timeline/${shipmentId}/timeline`);
     
     if (response.data.success) {
       return {
@@ -631,7 +631,7 @@ export const cancelShipment = async (shipmentId, cancelData) => {
 // 18. ADD COST TO SHIPMENT
 export const addShipmentCost = async (shipmentId, costData) => {
   try {
-    const response = await axiosInstance.post(`/shipments/${shipmentId}/costs`, costData);
+    const response = await axiosInstance.post(`/my-shipment/${shipmentId}/costs`, costData);
     
     if (response.data.success) {
       return {
@@ -656,7 +656,7 @@ export const addShipmentCost = async (shipmentId, costData) => {
 // 19. GET SHIPMENT COSTS
 export const getShipmentCosts = async (shipmentId) => {
   try {
-    const response = await axiosInstance.get(`/shipments/${shipmentId}/costs`);
+    const response = await axiosInstance.get(`/my-shipment/${shipmentId}/costs`);
     
     if (response.data.success) {
       return {
@@ -681,7 +681,7 @@ export const getShipmentCosts = async (shipmentId) => {
 // 20. UPDATE COST
 export const updateShipmentCost = async (shipmentId, costId, updateData) => {
   try {
-    const response = await axiosInstance.put(`/shipments/${shipmentId}/costs/${costId}`, updateData);
+    const response = await axiosInstance.put(`/my-shipment/${shipmentId}/costs/${costId}`, updateData);
     
     if (response.data.success) {
       return {
@@ -706,7 +706,7 @@ export const updateShipmentCost = async (shipmentId, costId, updateData) => {
 // 21. DELETE COST
 export const deleteShipmentCost = async (shipmentId, costId) => {
   try {
-    const response = await axiosInstance.delete(`/shipments/${shipmentId}/costs/${costId}`);
+    const response = await axiosInstance.delete(`/my-shipment/${shipmentId}/costs/${costId}`);
     
     if (response.data.success) {
       return {

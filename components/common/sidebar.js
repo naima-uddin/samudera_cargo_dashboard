@@ -97,7 +97,7 @@ const menuItems = [
     roles: ['admin'],
     children: [
       {
-        title: 'Customers',
+        title: 'All Users',
         path: '/users/customers',
         icon: <HiOutlineUserGroup className="w-4 h-4" />,
         roles: ['admin']

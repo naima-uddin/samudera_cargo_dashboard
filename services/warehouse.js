@@ -13,7 +13,7 @@ import axiosInstance from '@/lib/axiosInstance';
 // ওয়ারহাউজ রিসিপ্ট কনসলিডেট করার ফাংশন
 export const consolidateWarehouseReceipt = async (receiptId) => {
   try {
-    const response = await api.patch(`/warehouse/receipts/${receiptId}/consolidate`, {
+    const response = await axiosInstance.patch(`/receipts/${receiptId}/consolidate`, {
       status: 'consolidated'
     });
     return { success: true, data: response.data };

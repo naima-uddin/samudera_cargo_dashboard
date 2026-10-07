@@ -224,13 +224,13 @@ export const updatePriceQuote = async (bookingId, quoteData) => {
 
 // 5. CUSTOMER ACCEPT QUOTE
 // Controller: exports.acceptQuote
-// Endpoint: PUT /bookings/:id/accept
+// Endpoint: PUT /booking/:id/accept  (singular — matches the backend route)
 export const acceptQuote = async (bookingId, notes = '') => {
   const key = `acceptQuote:${bookingId}`;
 
   return runSingleFlight(key, async () => {
   try {
-    const response = await axiosInstance.put(`/bookings/${bookingId}/accept`, { notes });
+    const response = await axiosInstance.put(`/booking/${bookingId}/accept`, { notes });
     
     if (response.data.success) {
       return {
@@ -283,10 +283,10 @@ export const acceptQuote = async (bookingId, notes = '') => {
 
 // 6. CUSTOMER REJECT QUOTE
 // Controller: exports.rejectQuote
-// Endpoint: POST /bookings/:id/reject-quote
+// Endpoint: PUT /booking/:id/reject  (singular PUT — matches the backend route)
 export const rejectQuote = async (bookingId, reason = '') => {
   try {
-    const response = await axiosInstance.post(`/bookings/${bookingId}/reject-quote`, { reason });
+    const response = await axiosInstance.put(`/booking/${bookingId}/reject`, { reason });
     
     if (response.data.success) {
       return {

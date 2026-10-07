@@ -946,7 +946,11 @@ export default function CreateBooking() {
         address: {
           ...prev.sender.address,
           addressLine1: customer.companyAddress || '',
-          country: customer.destinationMarkets?.[0] || ''
+          // The sender IS this customer, so use their own country — NOT their
+          // destinationMarkets (that's where they ship TO, i.e. the destination).
+          // Falls back to empty (admin fills in step 3), consistent with the
+          // client-side booking form.
+          country: customer.address?.country || customer.country || ''
         }
       }
     }));
@@ -1182,7 +1186,8 @@ export default function CreateBooking() {
       const bookingData = {
         customer: formData.customer,
         createdBy: adminUser?._id,
-        
+        pickupRequired,
+
         shipmentClassification: {
           mainType: formData.shipmentClassification.mainType,
           subType: formData.shipmentClassification.subType

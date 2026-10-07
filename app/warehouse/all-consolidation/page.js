@@ -2239,7 +2239,7 @@ const ConsolidationDetailsModal = ({
                       <div className="text-right">
                         <p className="text-[9px] text-gray-400">Step</p>
                         <p className="text-xs font-bold text-red-600">
-                          {currentStepIndex + 1}/{statusSteps.length}
+                          {journeyAnchorIndex + 1}/{statusSteps.length}
                         </p>
                       </div>
                     </div>
@@ -2251,7 +2251,7 @@ const ConsolidationDetailsModal = ({
                     
                     {statusSteps.map((step, idx) => {
                       const StepIcon = step.icon;
-                      const isCompleted = idx <= currentStepIndex;
+                      const isCompleted = idx <= journeyAnchorIndex;
                       const isCurrent = idx === currentStepIndex;
                       
                       return (

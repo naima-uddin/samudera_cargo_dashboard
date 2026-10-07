@@ -462,7 +462,7 @@ const UserProfile = ({ collapsed, user, onLogout }) => {
                 <p className="text-sm font-medium text-gray-700 group-hover:text-primary">
                   {getDisplayName()}
                 </p>
-                <p className="text-xs text-gray-400 capitalize">{user?.role || 'admin'}</p>
+                <p className="text-xs text-gray-400 capitalize">{user?.role || 'user'}</p>
               </div>
               {isLoggingOut ? (
                 <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-primary rounded-full animate-spin"></div>

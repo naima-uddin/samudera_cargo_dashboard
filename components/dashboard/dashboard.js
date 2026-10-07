@@ -557,7 +557,18 @@ const DashboardSummary = () => {
                 Welcome back, {user?.firstName || user?.name || 'User'}! Track the latest bookings, shipments, invoices, and warehouse activity all in one place.
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-                <Chip label={`Role: ${isStaffUser ? 'Warehouse Staff' : isAdminUser ? 'Admin' : 'User'}`} color="secondary" />
+                <Chip
+                  label={`Role: ${
+                    user?.role === 'warehouse'
+                      ? 'Warehouse'
+                      : user?.role === 'operations'
+                        ? 'Operations'
+                        : isAdminUser
+                          ? 'Admin'
+                          : 'User'
+                  }`}
+                  color="secondary"
+                />
                 <Chip label={`Updated: ${new Date().toLocaleString()}`} variant="outlined" sx={{ borderColor: 'rgba(0,0,0,0.12)', color: 'text.primary' }} />
               </Box>
               

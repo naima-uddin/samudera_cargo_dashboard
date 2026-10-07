@@ -12,7 +12,9 @@ export const login = async (email, password) => {
       // Store in cookies
       Cookies.set('authToken', response.data.token, { expires: 7 });
       Cookies.set('token', response.data.token, { expires: 7 });
-      Cookies.set('user', JSON.stringify(response.data.data), { expires: 7 });
+      const userData = JSON.stringify(response.data.data);
+      Cookies.set('user', userData, { expires: 7 });
+      Cookies.set('userDetails', userData, { expires: 7 });
     }
     
     return response.data;

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -42,7 +42,7 @@ import {
   FaRegTimesCircle
 } from 'react-icons/fa';
 import { MdAdminPanelSettings, MdSecurity, MdVerified, MdEmail, MdPhone } from 'react-icons/md';
-import { getAllUsers, getUserById, updateUser, deleteUser, getUsersByRole } from '@/services/Authentication';
+import { getAllUsers, getUserById, updateUser, deleteUser } from '@/services/Authentication';
 
 const CustomersPage = () => {
   const [users, setUsers] = useState([]);
@@ -54,6 +54,7 @@ const CustomersPage = () => {
   const [showViewModal, setShowViewModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [filterRole, setFilterRole] = useState('all');
+  const hasLoadedUsers = useRef(false);
   const [editFormData, setEditFormData] = useState({
     firstName: '',
     lastName: '',
@@ -152,61 +153,6 @@ const CustomersPage = () => {
     }
   };
 
-  // Fetch users by role
-  const fetchUsersByRole = async (role) => {
-    if (role === 'all') {
-      fetchAllUsers();
-      return;
-    }
-    
-    setLoading(true);
-    try {
-      const response = await getUsersByRole(role);
-      
-      let usersData = [];
-      if (response?.data) {
-        if (Array.isArray(response.data)) {
-          usersData = response.data;
-        } else if (response.data?.data && Array.isArray(response.data.data)) {
-          usersData = response.data.data;
-        }
-      } else if (Array.isArray(response)) {
-        usersData = response;
-      }
-
-      const formattedUsers = usersData.map(user => ({
-        _id: user._id || '',
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'N/A',
-        email: user.email || 'N/A',
-        phone: user.phone || 'N/A',
-        role: user.role || role,
-        status: user.status || 'active',
-        isVerified: user.isVerified || false,
-        companyName: user.companyName || 'N/A',
-        companyAddress: user.companyAddress || '',
-        companyVAT: user.companyVAT || '',
-        businessType: user.businessType || '',
-        employeeId: user.employeeId || '',
-        department: user.department || '',
-        warehouseLocation: user.warehouseLocation || '',
-        createdAt: user.createdAt || user.createDate || new Date().toISOString()
-      }));
-
-      setUsers(formattedUsers);
-      toast.info(`Showing ${formattedUsers.length} ${role} users`);
-    } catch (error) {
-      toast.error(error.message || 'Failed to fetch users');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsersByRole(filterRole);
-  }, [filterRole]);
-
   const handleRoleFilterClick = (role) => {
     setFilterRole(role);
     setCurrentPage(1);
@@ -219,7 +165,11 @@ const CustomersPage = () => {
   };
 
   // Filter users
-  const filteredUsers = users.filter(user => 
+  const roleFilteredUsers = filterRole === 'all'
+    ? users
+    : users.filter(user => user.role === filterRole);
+
+  const filteredUsers = roleFilteredUsers.filter(user => 
     user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -339,7 +289,7 @@ const CustomersPage = () => {
     try {
       await updateUser(selectedUser._id, editFormData);
       toast.success('User updated successfully!', {
-        onClose: () => fetchUsersByRole(filterRole)
+        onClose: fetchAllUsers
       });
       setShowEditModal(false);
     } catch (error) {
@@ -366,7 +316,7 @@ const CustomersPage = () => {
                 await deleteUser(userId);
                 toast.dismiss();
                 toast.success('User deleted successfully!', {
-                  onClose: () => fetchUsersByRole(filterRole)
+                  onClose: fetchAllUsers
                 });
               } catch (error) {
                 toast.dismiss();
@@ -410,6 +360,8 @@ const CustomersPage = () => {
   };
 
   useEffect(() => {
+    if (hasLoadedUsers.current) return;
+    hasLoadedUsers.current = true;
     fetchAllUsers();
   }, []);
 

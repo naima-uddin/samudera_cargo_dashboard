@@ -109,7 +109,7 @@ export const getInvoicesByCustomer = async (customerId, params = {}) => {
 // Endpoint: PUT /api/invoices/:id
 export const updateInvoice = async (invoiceId, updateData) => {
   try {
-    const response = await axiosInstance.put(`/invoices/${invoiceId}`, updateData);
+    const response = await axiosInstance.put(`/updateInvoice/${invoiceId}`, updateData);
     
     if (response.data.success) {
       return {
@@ -162,7 +162,7 @@ export const deleteInvoice = async (invoiceId) => {
 // Endpoint: PUT /api/invoices/:id/mark-paid
 export const markInvoiceAsPaid = async (invoiceId, paymentData) => {
   try {
-    const response = await axiosInstance.put(`/mark-paid/${invoiceId}`, paymentData);
+    const response = await axiosInstance.post(`/mark-paid/${invoiceId}`, paymentData);
     
     if (response.data.success) {
       return {
@@ -189,7 +189,7 @@ export const markInvoiceAsPaid = async (invoiceId, paymentData) => {
 // Endpoint: POST /api/invoices/:id/send-email
 export const sendInvoiceEmail = async (invoiceId, emailData) => {
   try {
-    const response = await axiosInstance.post(`/invoices/${invoiceId}/send-email`, emailData);
+    const response = await axiosInstance.post(`/invoice/${invoiceId}/send-email`, emailData);
     
     if (response.data.success) {
       return {
@@ -269,7 +269,7 @@ export const generateInvoicePDF = async (invoiceId) => {
 // Endpoint: PUT /api/invoices/bulk/update
 export const bulkUpdateInvoices = async (invoiceIds, updateData) => {
   try {
-    const response = await axiosInstance.put('/invoices/bulk/update', {
+    const response = await axiosInstance.post('/invoice/bulk-update', {
       invoiceIds,
       updateData
     });

@@ -23,20 +23,20 @@ export const consolidateWarehouseReceipt = async (receiptId) => {
 };
 export const consolidateShipment = async (receiptId, consolidationData) => {
   try {
-    const response = await fetch(`${API_URL}/warehouse/receipts/${receiptId}/consolidate`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(consolidationData)
-    });
-    
-    const data = await response.json();
-    return { success: response.ok, data, message: data.message };
+    // Route through axiosInstance so the cookie auth token + API base URL are
+    // used (previously a raw fetch with a null localStorage token and a wrong
+    // '/warehouse/receipts/...' path hitting an undefined API_URL).
+    const response = await axiosInstance.patch(
+      `/receipts/${receiptId}/consolidate`,
+      consolidationData
+    );
+    return { success: true, data: response.data, message: response.data?.message };
   } catch (error) {
     console.error('Consolidation error:', error);
-    return { success: false, message: error.message };
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message
+    };
   }
 };
 // Get single shipment by ID (for receive page)

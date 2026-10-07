@@ -16,6 +16,7 @@ import {
   formatDestination
 } from '@/services/consolidation';
 import { formatDate } from '@/services/booking';
+import axiosInstance from '@/lib/axiosInstance';
 import { toast } from 'react-toastify';
 import {
   Loader2, Package, Search, Calendar, MapPin, User,
@@ -643,21 +644,13 @@ const CreateConsolidationModal = ({ isOpen, onClose, group, selectedShipments, o
         if (receiptIds.length > 0) {
           for (const receiptId of receiptIds) {
             try {
-              const token = localStorage.getItem('token');
-              const response = await fetch(`http://localhost:5000/api/warehouse/receipts/${receiptId}/consolidate`, {
-                method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ status: 'consolidated' })
+              // Use the shared axiosInstance so the request carries the cookie
+              // auth token and the configured API base URL (was hardcoded to
+              // http://localhost:5000 with a null localStorage token + wrong path).
+              await axiosInstance.patch(`/receipts/${receiptId}/consolidate`, {
+                status: 'consolidated'
               });
-              
-              if (response.ok) {
-                console.log(`✅ Receipt ${receiptId} marked as consolidated`);
-              } else {
-                console.error(`Failed to update receipt ${receiptId}`);
-              }
+              console.log(`✅ Receipt ${receiptId} marked as consolidated`);
             } catch (err) {
               console.error(`Error updating receipt ${receiptId}:`, err);
             }

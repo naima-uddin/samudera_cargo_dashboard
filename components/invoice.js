@@ -153,7 +153,17 @@ const InvoicePDF = ({ invoice, companyInfo }) => {
     phone: '+66977830395',
     email: 'info@samuderathai.com'
   };
-  const info = companyInfo || defaultCompany;
+  // Per-field fallback: site-settings values win, but any empty field falls
+  // back to the real company default (a plain `companyInfo || defaultCompany`
+  // never used the default, since the object is always truthy — so empty site
+  // settings showed a blank company on the invoice).
+  const info = {
+    name: companyInfo?.name || defaultCompany.name,
+    address: companyInfo?.address || defaultCompany.address,
+    city: companyInfo?.city || defaultCompany.city,
+    phone: companyInfo?.phone || defaultCompany.phone,
+    email: companyInfo?.email || defaultCompany.email,
+  };
 
   return (
     <Document>

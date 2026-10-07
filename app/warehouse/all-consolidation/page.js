@@ -1185,10 +1185,32 @@ const ConsolidationCard = ({
   };
 
   const statusSteps = getStatusSteps();
+
+  // on_hold / cancelled / returned sit at the END of the steps array. Using
+  // their index directly made "Done" include every prior step and the progress
+  // jump near the end (e.g. 88% while On Hold, Upcoming = Cancelled/Returned).
+  // For those states we anchor Done / Upcoming / progress to where the journey
+  // actually was (lastActiveStatus) while still showing the current state label.
+  const SPECIAL_CONSOLIDATION_STATES = ['on_hold', 'cancelled', 'returned'];
+  const isSpecialConsolidationState = SPECIAL_CONSOLIDATION_STATES.includes(timelineJourneyStatus);
+
+  // Index of the actual status — used only for the "Current" label/icon.
   const currentStepIndex = Math.max(0, statusSteps.findIndex(step => step.value === timelineJourneyStatus));
-  const previousSteps = statusSteps.slice(0, currentStepIndex);
-  const nextSteps = statusSteps.slice(currentStepIndex + 1, currentStepIndex + 3);
-  const progressPercent = Math.round(((currentStepIndex + 1) / statusSteps.length) * 100);
+
+  // Journey anchor — where progress really is. For special states fall back to
+  // the status the consolidation held at before entering that state.
+  const journeyAnchorStatus = isSpecialConsolidationState
+    ? normalizeConsolidationTimelineStatus(consolidation.lastActiveStatus || 'pending')
+    : timelineJourneyStatus;
+  const journeyAnchorIndex = Math.max(0, statusSteps.findIndex(step => step.value === journeyAnchorStatus));
+
+  const previousSteps = isSpecialConsolidationState
+    ? statusSteps.slice(0, journeyAnchorIndex + 1) // the anchor was reached → done
+    : statusSteps.slice(0, currentStepIndex);
+  const nextSteps = statusSteps
+    .slice(journeyAnchorIndex + 1, journeyAnchorIndex + 3)
+    .filter(step => !SPECIAL_CONSOLIDATION_STATES.includes(step.value));
+  const progressPercent = Math.round(((journeyAnchorIndex + 1) / statusSteps.length) * 100);
 
   const origin = consolidation.originWarehouse || 'N/A';
   const destination = consolidation.destinationPort || 'N/A';
@@ -1529,13 +1551,13 @@ const ConsolidationCard = ({
       {!isJourneyExpanded && (
         <div className="flex items-center space-x-1 ml-2">
           <div className="w-16 bg-gray-200 rounded-full h-1">
-            <div 
+            <div
               className="bg-gradient-to-r from-red-500 to-amber-500 h-1 rounded-full"
-              style={{ width: `${((currentStepIndex + 1) / statusSteps.length) * 100}%` }}
+              style={{ width: `${progressPercent}%` }}
             />
           </div>
           <span className="text-[9px] font-medium text-red-600">
-            {Math.round(((currentStepIndex + 1) / statusSteps.length) * 100)}%
+            {progressPercent}%
           </span>
         </div>
       )}
@@ -1546,7 +1568,7 @@ const ConsolidationCard = ({
       {!isJourneyExpanded && (
         <div className="bg-red-200/50 px-1.5 py-0.5 rounded-full">
           <span className="text-[8px] font-semibold text-red-700">
-            {currentStepIndex + 1}/{statusSteps.length}
+            {journeyAnchorIndex + 1}/{statusSteps.length}
           </span>
         </div>
       )}
@@ -1572,7 +1594,7 @@ const ConsolidationCard = ({
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
             className="bg-gradient-to-r from-red-500 to-amber-500 h-2 rounded-full transition-all duration-500"
-            style={{ width: `${((currentStepIndex + 1) / statusSteps.length) * 100}%` }}
+            style={{ width: `${progressPercent}%` }}
           />
         </div>
         <div className="flex justify-between text-[9px] text-gray-400 mt-1">
@@ -1603,7 +1625,7 @@ const ConsolidationCard = ({
           <div className="text-right">
             <p className="text-[9px] text-gray-400">Completion</p>
             <p className="text-lg font-bold text-red-600">
-              {Math.round(((currentStepIndex + 1) / statusSteps.length) * 100)}%
+              {progressPercent}%
             </p>
           </div>
         </div>
@@ -1889,11 +1911,25 @@ const ConsolidationDetailsModal = ({
 
   // ✅ এখানে ভেরিয়েবল ক্যালকুলেট করুন (সরাসরি)
   const statusSteps = getStatusSteps();
+  const MODAL_SPECIAL_STATES = ['on_hold', 'cancelled', 'returned'];
+  const isModalSpecialState = MODAL_SPECIAL_STATES.includes(journeyStatus);
   const currentStepIndex = Math.max(0, statusSteps.findIndex(step => step.status === journeyStatus));
-  
+
+  // Anchor progress to where the journey actually was (lastActiveStatus) when
+  // on hold / cancelled / returned — otherwise "Done", the step counter and the
+  // completed ticks jumped to the end of the list.
+  const modalAnchorStatus = isModalSpecialState
+    ? normalizeConsolidationTimelineStatus(consolidation?.lastActiveStatus || 'pending')
+    : journeyStatus;
+  const journeyAnchorIndex = Math.max(0, statusSteps.findIndex(step => step.status === modalAnchorStatus));
+
   // ✅ কেবল মোডালের জন্য লোকাল ভেরিয়েবল
-  const modalPreviousSteps = statusSteps.slice(0, currentStepIndex);
-  const modalNextSteps = statusSteps.slice(currentStepIndex + 1, currentStepIndex + 4);
+  const modalPreviousSteps = isModalSpecialState
+    ? statusSteps.slice(0, journeyAnchorIndex + 1)
+    : statusSteps.slice(0, currentStepIndex);
+  const modalNextSteps = statusSteps
+    .slice(journeyAnchorIndex + 1, journeyAnchorIndex + 4)
+    .filter(step => !MODAL_SPECIAL_STATES.includes(step.status));
 
   // ✅ কনসোল লগ দিয়ে চেক করুন
   console.log('Modal Debug:', { 
@@ -2179,7 +2215,7 @@ const ConsolidationDetailsModal = ({
                   <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
                     <div 
                       className="bg-gradient-to-r from-red-500 to-amber-500 h-1.5 rounded-full transition-all duration-500"
-                      style={{ width: `${((currentStepIndex + 1) / statusSteps.length) * 100}%` }}
+                      style={{ width: `${((journeyAnchorIndex + 1) / statusSteps.length) * 100}%` }}
                     />
                   </div>
                   

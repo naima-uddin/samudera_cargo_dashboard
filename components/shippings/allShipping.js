@@ -62,6 +62,7 @@ import {
   getReturnStatusColor,
   formatReturnCost
 } from '@/services/shipping';
+import { getAllUsers } from '@/services/Authentication';
 
 // Icons
 import {
@@ -1375,11 +1376,41 @@ const TrackingUpdateModal = ({ isOpen, onClose, shipment, onAdd }) => {
 const AssignModal = ({ isOpen, onClose, shipment, onAssign }) => {
   const [formData, setFormData] = useState({ staffId: '', role: 'operations', notes: '' });
   const [loading, setLoading] = useState(false);
+  const [staffOptions, setStaffOptions] = useState([]);
+  const [loadingStaff, setLoadingStaff] = useState(false);
 
   useEffect(() => { if (shipment) setFormData({ staffId: '', role: 'operations', notes: '' }); }, [shipment]);
+
+  // Load the REAL staff list from the backend. (Previously this was a hardcoded
+  // list of fake names/ids like "staff1/John Doe", so assigning always failed
+  // with "Staff not found" since the backend looks the id up as a real user.)
+  useEffect(() => {
+    if (!isOpen) return;
+    let active = true;
+    (async () => {
+      setLoadingStaff(true);
+      try {
+        const res = await getAllUsers();
+        const users = res?.data || res?.users || [];
+        const options = users
+          .filter((u) => u && u._id && u.role && u.role !== 'customer')
+          .map((u) => ({
+            value: u._id,
+            label: `${`${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email || 'Staff'} (${u.role})`,
+          }));
+        if (active) setStaffOptions(options);
+      } catch (err) {
+        if (active) setStaffOptions([]);
+        toast.error('Failed to load staff list');
+      } finally {
+        if (active) setLoadingStaff(false);
+      }
+    })();
+    return () => { active = false; };
+  }, [isOpen]);
+
   if (!isOpen || !shipment) return null;
 
-  const staffOptions = [{ value: 'staff1', label: 'John Doe (Operations)' }, { value: 'staff2', label: 'Jane Smith (Warehouse)' }, { value: 'staff3', label: 'Mike Johnson (Driver)' }, { value: 'staff4', label: 'Sarah Wilson (Customer Service)' }, { value: 'staff5', label: 'David Brown (Customs Broker)' }];
   const roleOptions = [{ value: 'operations', label: 'Operations' }, { value: 'warehouse', label: 'Warehouse' }, { value: 'driver', label: 'Driver' }, { value: 'customs', label: 'Customs Broker' }, { value: 'customer_service', label: 'Customer Service' }];
 
   const handleSubmit = async (e) => {
@@ -1392,7 +1423,7 @@ const AssignModal = ({ isOpen, onClose, shipment, onAssign }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Assign Staff to Shipment" size="md">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Select label="Staff Member" value={formData.staffId} onChange={(e) => setFormData({ ...formData, staffId: e.target.value })} options={staffOptions} placeholder="Select staff" required icon={UserCog} />
+        <Select label="Staff Member" value={formData.staffId} onChange={(e) => setFormData({ ...formData, staffId: e.target.value })} options={staffOptions} placeholder={loadingStaff ? 'Loading staff...' : (staffOptions.length ? 'Select staff' : 'No staff found')} disabled={loadingStaff} required icon={UserCog} />
         <Select label="Role" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} options={roleOptions} placeholder="Select role" required icon={BriefcaseIcon} />
         <TextArea label="Notes" value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} placeholder="Additional instructions..." rows={3} />
         <div className="flex justify-end space-x-3 pt-4"><Button type="button" variant="ghost" onClick={onClose}>Cancel</Button><Button type="submit" variant="primary" isLoading={loading}>Assign Staff</Button></div>

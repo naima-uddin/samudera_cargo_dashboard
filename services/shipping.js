@@ -157,7 +157,7 @@ export const getAllShipments = async (params = {}) => {
 // 2. GET SINGLE SHIPMENT BY ID - বুকিংয়ের মতো
 export const getShipmentById = async (shipmentId) => {
   try {
-    const response = await axiosInstance.get(`/shipments/${shipmentId}`);
+    const response = await axiosInstance.get(`/my-shipment-by-id/${shipmentId}`);
     
     if (response.data.success) {
       return {
@@ -182,7 +182,7 @@ export const getShipmentById = async (shipmentId) => {
 // 3. UPDATE SHIPMENT STATUS - বুকিংয়ের মতো
 export const updateShipmentStatus = async (shipmentId, statusData) => {
   try {
-    const response = await axiosInstance.patch(`/shipments/${shipmentId}/status`, statusData);
+    const response = await axiosInstance.patch(`/update-shipment-status/${shipmentId}`, statusData);
     
     if (response.data.success) {
       return {
@@ -218,7 +218,7 @@ export const getMyShipments = async (params = {}) => {
       ...(safeParams.sort && { sort: safeParams.sort || '-createdAt' })
     });
 
-    const response = await axiosInstance.get(`/shipments/my-shipments?${queryParams}`);
+    const response = await axiosInstance.get(`/my-shipments?${queryParams}`);
     
     if (response.data.success) {
       return {
@@ -244,7 +244,7 @@ export const getMyShipments = async (params = {}) => {
 // 3. GET MY SHIPMENT BY ID (Customer)
 export const getMyShipmentById = async (shipmentId) => {
   try {
-    const response = await axiosInstance.get(`/shipments/my-shipments/${shipmentId}`);
+    const response = await axiosInstance.get(`/my-shipments/${shipmentId}`);
     
     if (response.data.success) {
       return {
@@ -382,7 +382,7 @@ export const updateShipment = async (shipmentId, updateData) => {
 // 8. DELETE SHIPMENT
 export const deleteShipment = async (shipmentId) => {
   try {
-    const response = await axiosInstance.delete(`/shipments/${shipmentId}`);
+    const response = await axiosInstance.delete(`/delete-shipment/${shipmentId}`);
     
     if (response.data.success) {
       return {
@@ -406,7 +406,7 @@ export const deleteShipment = async (shipmentId) => {
 // 9. UPDATE SHIPMENT STATUS
 // export const updateShipmentStatus = async (shipmentId, statusData) => {
 //   try {
-//     const response = await axiosInstance.patch(`/shipments/${shipmentId}/status`, statusData);
+//     const response = await axiosInstance.patch(`/update-shipment-status/${shipmentId}`, statusData);
     
 //     if (response.data.success) {
 //       return {
@@ -431,7 +431,7 @@ export const deleteShipment = async (shipmentId) => {
 // 10. ASSIGN SHIPMENT TO STAFF
 export const assignShipment = async (shipmentId, assignmentData) => {
   try {
-    const response = await axiosInstance.post(`/shipments/${shipmentId}/assign`, assignmentData);
+    const response = await axiosInstance.post(`/assign-shipment/${shipmentId}`, assignmentData);
     
     if (response.data.success) {
       return {
@@ -456,7 +456,7 @@ export const assignShipment = async (shipmentId, assignmentData) => {
 // 11. ADD TRACKING UPDATE
 export const addTrackingUpdate = async (shipmentId, trackingData) => {
   try {
-    const response = await axiosInstance.post(`/shipments/${shipmentId}/tracking`, trackingData);
+    const response = await axiosInstance.post(`/add-tracking-update/${shipmentId}`, trackingData);
     
     if (response.data.success) {
       return {
@@ -506,7 +506,7 @@ export const getShipmentTimeline = async (shipmentId) => {
 // 13. UPDATE TRANSPORT DETAILS
 export const updateTransportDetails = async (shipmentId, transportData) => {
   try {
-    const response = await axiosInstance.post(`/shipments/${shipmentId}/transport`, transportData);
+    const response = await axiosInstance.post(`/update-transport-details/${shipmentId}`, transportData);
     
     if (response.data.success) {
       return {
@@ -531,7 +531,7 @@ export const updateTransportDetails = async (shipmentId, transportData) => {
 // 14. ADD DOCUMENT TO SHIPMENT
 export const addShipmentDocument = async (shipmentId, documentData) => {
   try {
-    const response = await axiosInstance.post(`/shipments/${shipmentId}/documents`, documentData);
+    const response = await axiosInstance.post(`/add-document/${shipmentId}`, documentData);
     
     if (response.data.success) {
       return {
@@ -556,7 +556,7 @@ export const addShipmentDocument = async (shipmentId, documentData) => {
 // 15. ADD INTERNAL NOTE
 export const addInternalNote = async (shipmentId, noteData) => {
   try {
-    const response = await axiosInstance.post(`/shipments/${shipmentId}/notes/internal`, noteData);
+    const response = await axiosInstance.post(`/my-shipment/${shipmentId}/notes/internal`, noteData);
     
     if (response.data.success) {
       return {
@@ -581,7 +581,7 @@ export const addInternalNote = async (shipmentId, noteData) => {
 // 16. ADD CUSTOMER NOTE
 export const addCustomerNote = async (shipmentId, noteData) => {
   try {
-    const response = await axiosInstance.post(`/shipments/${shipmentId}/notes/customer`, noteData);
+    const response = await axiosInstance.post(`/my-shipment/${shipmentId}/notes/customer`, noteData);
     
     if (response.data.success) {
       return {
@@ -755,7 +755,7 @@ export const getPendingWarehouseShipments = async () => {
 // 23. RECEIVE AT WAREHOUSE
 export const receiveAtWarehouse = async (shipmentId, receiveData) => {
   try {
-    const response = await axiosInstance.patch(`/shipments/${shipmentId}/warehouse/receive`, receiveData);
+    const response = await axiosInstance.patch(`/${shipmentId}/warehouse/receive`, receiveData);
     
     if (response.data.success) {
       return {
@@ -780,7 +780,7 @@ export const receiveAtWarehouse = async (shipmentId, receiveData) => {
 // 24. PROCESS WAREHOUSE
 export const processWarehouse = async (shipmentId, processData) => {
   try {
-    const response = await axiosInstance.patch(`/shipments/${shipmentId}/warehouse/process`, processData);
+    const response = await axiosInstance.patch(`/${shipmentId}/warehouse/process`, processData);
     
     if (response.data.success) {
       return {
@@ -812,7 +812,7 @@ export const getShipmentStatistics = async (dateRange = {}) => {
       ...(safeDateRange.endDate && { endDate: safeDateRange.endDate })
     });
 
-    const response = await axiosInstance.get(`/shipments/stats/dashboard?${queryParams}`);
+    const response = await axiosInstance.get(`/stats/dashboard?${queryParams}`);
     
     if (response.data.success) {
       return {

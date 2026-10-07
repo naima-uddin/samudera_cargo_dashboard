@@ -44,7 +44,7 @@ export const getAllTrackings = async (params = {}) => {
 // 2. GET TRACKING BY ID
 export const getTrackingById = async (id, type = 'shipment') => {
   try {
-    const response = await axiosInstance.get(`/trackings/${id}?type=${type}`);
+    const response = await axiosInstance.get(`/tracking/${id}?type=${type}`);
     
     if (response.data.success) {
       return {
@@ -69,7 +69,7 @@ export const getTrackingById = async (id, type = 'shipment') => {
 // 3. UPDATE TRACKING STATUS
 export const updateTrackingStatus = async (id, updateData) => {
   try {
-    const response = await axiosInstance.put(`/trackings/${id}`, updateData);
+    const response = await axiosInstance.put(`/tracking/${id}`, updateData);
     
     if (response.data.success) {
       return {
@@ -122,7 +122,7 @@ export const bulkUpdateTrackings = async (trackingIds, updateData) => {
 // 5. DELETE TRACKING
 export const deleteTracking = async (id, type = 'shipment') => {
   try {
-    const response = await axiosInstance.delete(`/trackings/${id}?type=${type}`);
+    const response = await axiosInstance.delete(`/tracking/${id}?type=${type}`);
     
     if (response.data.success) {
       return {
@@ -272,7 +272,7 @@ export const exportTrackings = async (params = {}, format = 'csv') => {
 // 10. PUBLIC TRACKING (No Auth Required)
 export const publicTracking = async (trackingNumber) => {
   try {
-    const response = await axiosInstance.get(`/trackings/public/${trackingNumber}`);
+    const response = await axiosInstance.get(`/track/${trackingNumber}`);
     
     if (response.data.success) {
       return {

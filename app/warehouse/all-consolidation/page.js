@@ -3052,9 +3052,6 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
     }
   }, [consolidation]);
 
-  const genContainer = () => `CNTR-${Math.random().toString().slice(2,13).toUpperCase()}`;
-  const genSeal = () => `THSL26-${Math.random().toString().slice(2,8).toUpperCase()}`;
-
   const addContainerField = () => setFormData(prev => ({ ...prev, containerNumbers: [...prev.containerNumbers, ''] }));
   const removeContainerField = (i) => setFormData(prev => ({ ...prev, containerNumbers: prev.containerNumbers.filter((_, idx) => idx !== i) }));
   const updateContainerField = (i, value) => setFormData(prev => { const arr = [...prev.containerNumbers]; arr[i] = value; return { ...prev, containerNumbers: arr }; });
@@ -3176,7 +3173,6 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
                     onChange={(e) => updateContainerField(idx, e.target.value)}
                     className="flex-1 p-2 text-sm border rounded-lg focus:ring-1 focus:ring-[#E67E22]"
                   />
-                  <button type="button" onClick={() => updateContainerField(idx, genContainer())} className="px-2 py-1 text-xs bg-gray-100 rounded">Auto</button>
                   {formData.containerNumbers.length > 1 && (
                     <button type="button" onClick={() => removeContainerField(idx)} className="px-2 py-1 text-xs bg-red-50 text-red-600 rounded">Remove</button>
                   )}
@@ -3184,7 +3180,6 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
               ))}
               <div className="flex gap-2">
                 <button type="button" onClick={addContainerField} className="px-3 py-1 text-xs bg-green-50 text-green-700 rounded">Add container</button>
-                <button type="button" onClick={() => setFormData(prev => ({ ...prev, containerNumbers: [...(prev.containerNumbers || []), genContainer()] }))} className="px-3 py-1 text-xs bg-gray-100 rounded">Generate</button>
               </div>
             </div>
           </div>
@@ -3241,7 +3236,6 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
                     onChange={(e) => updateSealField(idx, e.target.value)}
                     className="flex-1 p-2 text-sm border rounded-lg focus:ring-1 focus:ring-[#E67E22]"
                   />
-                  <button type="button" onClick={() => updateSealField(idx, genSeal())} className="px-2 py-1 text-xs bg-gray-100 rounded">Auto</button>
                   {formData.sealNumbers.length > 1 && (
                     <button type="button" onClick={() => removeSealField(idx)} className="px-2 py-1 text-xs bg-red-50 text-red-600 rounded">Remove</button>
                   )}
@@ -3249,7 +3243,6 @@ const EditConsolidationModal = ({ isOpen, onClose, consolidation, onUpdated }) =
               ))}
               <div className="flex gap-2">
                 <button type="button" onClick={addSealField} className="px-3 py-1 text-xs bg-green-50 text-green-700 rounded">Add seal</button>
-                <button type="button" onClick={() => setFormData(prev => ({ ...prev, sealNumbers: [...(prev.sealNumbers || []), genSeal()] }))} className="px-3 py-1 text-xs bg-gray-100 rounded">Generate</button>
               </div>
             </div>
           </div>
